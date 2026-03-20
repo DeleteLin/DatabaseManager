@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 通用 -->
+    <string name="app_name">小小数据库</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="delete">删除</string>
+    <string name="edit">编辑</string>
+    <string name="add">添加</string>
+    <string name="close">关闭</string>
+    <string name="confirm">确认</string>
+    <string name="loading">加载中...</string>
+    <string name="error">错误</string>
+    <string name="success">成功</string>
+    <string name="no_data">暂无数据</string>
+
+    <!-- 导航 -->
+    <string name="nav_database_list">数据库</string>
+    <string name="nav_query">查询</string>
+    <string name="nav_profile">我的</string>
+
+    <!-- 数据库列表 -->
+    <string name="database_list_title">数据库连接</string>
+    <string name="database_add_title">添加数据库</string>
+    <string name="database_edit_title">编辑数据库</string>
+    <string name="database_name">名称</string>
+    <string name="database_host">主机</string>
+    <string name="database_port">端口</string>
+    <string name="database_username">用户名</string>
+    <string name="database_password">密码</string>
+    <string name="database_type">数据库类型</string>
+    <string name="database_test_connection">测试连接</string>
+    <string name="database_connection_success">连接成功</string>
+    <string name="database_connection_failed">连接失败</string>
+    <string name="database_delete_confirm">确定要删除此数据库连接吗？</string>
+
+    <!-- 查询页面 -->
+    <string name="query_title">SQL 查询</string>
+    <string name="query_editor_hint">在此输入 SQL 语句...</string>
+    <string name="query_execute">执行</string>
+    <string name="query_result">查询结果</string>
+    <string name="query_history">历史记录</string>
+    <string name="query_favorite">收藏</string>
+    <string name="query_save_favorite">保存为收藏</string>
+    <string name="query_execution_time">执行时间：%d ms</string>
+    <string name="query_row_count">共 %d 行</string>
+
+    <!-- 个人中心 -->
+    <string name="profile_title">个人中心</string>
+    <string name="profile_statistics">使用统计</string>
+    <string name="profile_database_count">数据库数量</string>
+    <string name="profile_query_count">查询次数</string>
+    <string name="profile_settings">设置</string>
+    <string name="profile_theme">主题</string>
+    <string name="profile_language">语言</string>
+    <string name="profile_about">关于</string>
+    <string name="profile_version">版本 %s</string>
+
+    <!-- 主题设置 -->
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="theme_system">跟随系统</string>
+    <string name="theme_color">主题色</string>
+
+    <!-- 语言设置 -->
+    <string name="language_zh">中文</string>
+    <string name="language_en">English</string>
+
+    <!-- 数据库类型 -->
+    <string name="db_type_mysql">MySQL</string>
+    <string name="db_type_postgresql">PostgreSQL</string>
+    <string name="db_type_redis">Redis</string>
+    <string name="db_type_rpc">RPC 远程连接</string>
+
+    <!-- 表信息 -->
+    <string name="table_name">表名</string>
+    <string name="table_schema">表结构</string>
+    <string name="table_columns">列</string>
+    <string name="table_primary_key">主键</string>
+    <string name="table_index">索引</string>
+    <string name="table_foreign_key">外键</string>
+
+    <!-- 表浏览器 -->
+    <string name="database_label">数据库</string>
+    <string name="not_selected">未选择</string>
+    <string name="refresh">刷新</string>
+    <string name="create">创建</string>
+    <string name="create_table">新建表</string>
+    <string name="no_database_selected">未选择数据库连接</string>
+    <string name="connection_failed">连接失败</string>
+    <string name="select_table">表</string>
+    <string name="no_tables">暂无表</string>
+    <string name="select_table_to_show_data">选择一个表查看详情</string>
+    <string name="fields">字段</string>
+    <string name="indexes">索引</string>
+    <string name="statistics">统计</string>
+    <string name="foreign_keys">外键</string>
+    <string name="search">搜索</string>
+    <string name="back">返回</string>
+    <string name="add_field">添加字段</string>
+    <string name="create_index">创建索引</string>
+    <string name="pk_badge">主键</string>
+    <string name="ai_badge">自增</string>
+    <string name="not_null">非空</string>
+    <string name="field_default">默认值</string>
+    <string name="field_comment">注释</string>
+    <string name="primary">主键</string>
+    <string name="unique">唯一</string>
+    <string name="index_columns">列</string>
+    <string name="index_type">类型</string>
+    <string name="row_count">行数</string>
+    <string name="data_size">数据大小</string>
+    <string name="create_time">创建时间</string>
+    <string name="update_time">更新时间</string>
+    <string name="fk_column">外键列</string>
+    <string name="delete_field">删除字段</string>
+    <string name="drop_index">删除索引</string>
+    <string name="confirm_drop_column">确定要删除字段 {column} 吗？</string>
+    <string name="confirm_drop_index">确定要删除索引 {index} 吗？</string>
+
+    <!-- 数据库切换 -->
+    <string name="server_database_label">服务器数据库</string>
+    <string name="switch_database">切换数据库</string>
+    <string name="refresh_database_list">刷新数据库列表</string>
+    <string name="no_database_available">暂无数据库</string>
+    <string name="server_databases">服务器数据库列表</string>
+    <string name="current_database">当前数据库</string>
+
+    <!-- 数据库管理 -->
+    <string name="manage_databases">管理数据库</string>
+    <string name="create_database">创建数据库</string>
+    <string name="drop_database">删除数据库</string>
+    <string name="database_name_hint">数据库名称</string>
+    <string name="confirm_drop_database">确定要删除数据库 {database} 吗？此操作不可逆！</string>
+    <string name="database_size">数据库大小</string>
+    <string name="table_count">表数量</string>
+    <string name="database_name_exists">数据库已存在</string>
+    <string name="database_created">数据库创建成功</string>
+    <string name="database_dropped">数据库已删除</string>
+    <string name="database_name_empty">数据库名称不能为空</string>
+    <string name="database_name_invalid">数据库名称包含非法字符</string>
+
+    <!-- 数据库列表 -->
+    <string name="databases">数据库</string>
+    <string name="empty_database_list">数据库列表为空</string>
+    <string name="add_database_hint">添加一个数据库开始使用</string>
+
+    <!-- 查询执行结果 -->
+    <string name="execution_success">执行成功</string>
+    <string name="affected_rows">受影响行数：{rows}</string>
+    <string name="sql_statement">SQL 语句</string>
+    <string name="sql_placeholder">输入 SQL 语句，例如：SELECT * FROM table</string>
+    <string name="disconnected">未连接</string>
+    <string name="connecting">连接中...</string>
+    <string name="connected">已连接</string>
+    <string name="failed">失败</string>
+    <string name="transaction_mode">事务模式</string>
+    <string name="transaction_auto">自动</string>
+    <string name="transaction_manual">手动</string>
+    <string name="begin_transaction">开始事务</string>
+    <string name="in_transaction">事务中</string>
+    <string name="commit_transaction">提交</string>
+    <string name="rollback_transaction">回滚</string>
+    <string name="no_tab">没有活动的标签页</string>
+    <string name="new_tab">新建标签页</string>
+    <string name="close_tab">关闭标签页</string>
+    <string name="total_rows">共 {rowCount} 行</string>
+    <string name="execution_time">{ms} ms</string>
+    <string name="query_result_placeholder">执行 SQL 语句后显示结果</string>
+    <string name="error_with_message">错误：{message}</string>
+    <string name="select_database">选择数据库</string>
+    <string name="new_query_session">新建查询会话</string>
+    <string name="session_name">会话名称</string>
+    <string name="session_name_placeholder">留空将生成默认名称 Query-X</string>
+    <string name="execute_selected">执行选中</string>
+    <string name="execute_all">执行全部</string>
+    <string name="auto_expand">自动展开</string>
+    <string name="collapse_result">折叠结果</string>
+    <string name="expand_result">展开结果</string>
+    <string name="command_editor">命令编辑器</string>
+    <string name="redis_command_hint">输入 Redis 命令，如：GET mykey</string>
+    <string name="result_summary">{rows} 行，{ms} ms</string>
+
+    <!-- 更多页：配置备份 -->
+    <string name="config_backup">配置备份</string>
+    <string name="config_backup_desc">导入/导出全部配置（含密码与密钥），需要密码加密</string>
+    <string name="export_config">导出配置</string>
+    <string name="import_config">导入配置</string>
+    <string name="clear_config_and_exit">清空配置并退出</string>
+    <string name="enter_backup_password">请输入备份密码</string>
+    <string name="confirm_backup_password">再次输入密码</string>
+    <string name="password_mismatch">两次输入的密码不一致</string>
+    <string name="password_too_short">密码至少需要 {min} 位</string>
+    <string name="export_success">导出成功</string>
+    <string name="export_failed">导出失败</string>
+    <string name="import_success">导入成功</string>
+    <string name="import_failed">导入失败：{message}</string>
+    <string name="wrong_password_or_corrupted">密码错误或文件已损坏</string>
+    <string name="confirm_clear_config_exit">确定要清空所有配置并关闭应用吗？此操作不可逆！</string>
+</resources>
