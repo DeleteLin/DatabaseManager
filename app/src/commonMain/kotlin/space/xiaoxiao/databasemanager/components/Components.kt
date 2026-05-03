@@ -129,6 +129,7 @@ object AppIcons {
  * 空状态组件 - 使用新设计系统
  */
 @Composable
+@Deprecated("Use AppEmptyState from DesignSystem.kt", ReplaceWith("AppEmptyState(icon, title, message, modifier, actionLabel, onAction)", "space.xiaoxiao.databasemanager.components.AppEmptyState"))
 fun StyledEmptyState(
     icon: ImageVector,
     title: String,
@@ -152,6 +153,7 @@ fun StyledEmptyState(
  * 错误状态组件 - 使用新设计系统
  */
 @Composable
+@Deprecated("Use AppErrorState from DesignSystem.kt", ReplaceWith("AppErrorState(message, onDismiss, onRetry, modifier, language, showRetry)", "space.xiaoxiao.databasemanager.components.AppErrorState"))
 fun StyledErrorState(
     message: String,
     icon: ImageVector,
@@ -364,4 +366,34 @@ fun SmallLoadingIndicator(
         strokeWidth = 2.dp,
         color = color
     )
+}
+
+/**
+ * 全屏加载状态组件
+ */
+@Composable
+fun AppFullScreenLoading(
+    message: String? = null
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            CircularProgressIndicator(
+                strokeWidth = 2.dp,
+                color = MaterialTheme.colorScheme.primary
+            )
+            if (message != null) {
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
 }

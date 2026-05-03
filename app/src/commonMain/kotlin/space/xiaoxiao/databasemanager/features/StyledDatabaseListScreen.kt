@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.ConnectionInfoChip
 import space.xiaoxiao.databasemanager.components.AppDivider
 import space.xiaoxiao.databasemanager.components.AppIconButton
 import space.xiaoxiao.databasemanager.components.AppIcons
@@ -287,16 +288,6 @@ fun StyledDatabaseConnectionCard(
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun ConnectionInfoChip(icon: androidx.compose.ui.graphics.vector.ImageVector, text: String, language: Language = Language.CHINESE) {
-    Surface(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp), tonalElevation = 2.dp) {
-        Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(text = text, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }

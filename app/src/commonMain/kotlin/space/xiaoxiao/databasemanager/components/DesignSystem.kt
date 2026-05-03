@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -422,4 +423,88 @@ fun AppErrorState(
             }
         }
     }
+}
+
+/**
+ * 统一确认对话框 - 支持危险操作样式
+ *
+ * @param isDangerous 危险操作模式：图标默认 Warning，确认按钮用 error 颜色
+ * @param icon 自定义图标，null 时根据 isDangerous 自动选择
+ */
+@Composable
+fun AppConfirmDialog(
+    title: String,
+    message: String,
+    confirmText: String,
+    cancelText: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    isDangerous: Boolean = false,
+    icon: ImageVector? = null
+) {
+    val resolvedIcon = icon ?: if (isDangerous) Icons.Filled.Warning else null
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = if (resolvedIcon != null) {
+            {
+                Icon(
+                    imageVector = resolvedIcon,
+                    contentDescription = null,
+                    tint = if (isDangerous) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        } else null,
+        title = { Text(title) },
+        text = { Text(message) },
+        confirmButton = {
+            AppButton(
+                onClick = onConfirm,
+                variant = if (isDangerous) ButtonVariant.Error else ButtonVariant.Primary
+            ) {
+                Text(confirmText)
+            }
+        },
+        dismissButton = {
+            AppTextButton(onClick = onDismiss) {
+                Text(cancelText)
+            }
+        }
+    )
+}
+
+/**
+ * 统一自定义对话框 - 支持任意表单内容
+ *
+ * @param content 自定义内容插槽，在 Column 作用域中渲染
+ */
+@Composable
+fun AppCustomDialog(
+    title: String,
+    confirmText: String,
+    cancelText: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column {
+                content()
+            }
+        },
+        confirmButton = {
+            AppButton(onClick = onConfirm) {
+                Text(confirmText)
+            }
+        },
+        dismissButton = {
+            AppTextButton(onClick = onDismiss) {
+                Text(cancelText)
+            }
+        }
+    )
 }
