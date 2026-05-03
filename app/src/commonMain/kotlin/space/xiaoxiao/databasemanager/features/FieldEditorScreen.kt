@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
+import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppButton
 import space.xiaoxiao.databasemanager.components.AppConfirmDialog
 import space.xiaoxiao.databasemanager.components.AppTextButton
@@ -84,16 +85,21 @@ fun FieldEditorScreen(
         typeName in listOf("VARCHAR", "CHAR", "TEXT", "LONGTEXT", "MEDIUMTEXT", "TINYTEXT")
     }
 
+    // 预计算字符串资源（非 Composable 回调中无法使用 stringResource）
+    val strFieldNameEmpty = stringResource("field_name_empty", language)
+    val strTypeLengthRequired = stringResource("type_length_required", language)
+    val strSaveFailed = stringResource("save_failed", language)
+
     val charsetOptions = listOf(
-        "" to "默认",
-        "utf8mb4" to "UTF-8 MB4 (推荐)",
-        "utf8" to "UTF-8",
-        "latin1" to "Latin1",
-        "gbk" to "GBK"
+        "" to stringResource("charset_default", language),
+        "utf8mb4" to stringResource("charset_utf8mb4", language),
+        "utf8" to stringResource("charset_utf8", language),
+        "latin1" to stringResource("charset_latin1", language),
+        "gbk" to stringResource("charset_gbk", language)
     )
 
-    val title = if (isEditMode) "编辑字段" else "添加字段"
-    val nameExistsError = "字段名 '$name' 已存在"
+    val title = if (isEditMode) stringResource("edit_field", language) else stringResource("add_field", language)
+    val nameExistsError = stringResource("field_name_exists_template", language).replace("{name}", name)
 
     Scaffold(
         topBar = {
@@ -104,7 +110,7 @@ fun FieldEditorScreen(
                     AppTextButton(
                         onClick = {
                             if (name.isBlank()) {
-                                errorMessage = "字段名不能为空"
+                                errorMessage = strFieldNameEmpty
                             } else if (!isEditMode && name in existingColumnNames) {
                                 errorMessage = nameExistsError
                             } else {
@@ -113,7 +119,7 @@ fun FieldEditorScreen(
                         },
                         enabled = !isSaving
                     ) {
-                        Text("保存")
+                        Text(stringResource("save", language))
                     }
                 }
             )
@@ -131,13 +137,13 @@ fun FieldEditorScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("字段名") },
+                label = { Text(stringResource("field_name", language)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 isError = !isEditMode && name in existingColumnNames,
                 supportingText = {
                     if (!isEditMode && name in existingColumnNames) {
-                        Text("此字段名已存在", color = MaterialTheme.colorScheme.error)
+                        Text(stringResource("field_name_exists", language), color = MaterialTheme.colorScheme.error)
                     }
                 }
             )
@@ -152,7 +158,7 @@ fun FieldEditorScreen(
                     value = typeName,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("数据类型") },
+                    label = { Text(stringResource("data_type", language)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(type = MenuAnchorType.PrimaryNotEditable),
@@ -178,9 +184,9 @@ fun FieldEditorScreen(
             AppTextField(
                 value = length,
                 onValueChange = { length = it.filter { c -> c.isDigit() } },
-                label = "长度 (可选)",
+                label = stringResource("length_optional", language),
                 singleLine = true,
-                placeholder = "例如：255"
+                placeholder = stringResource("length_placeholder", language)
             )
 
             // 字符集选择器（仅文本类型显示）
@@ -193,8 +199,8 @@ fun FieldEditorScreen(
                         value = charset,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("字符集 (可选)") },
-                        placeholder = { Text("选择字符集") },
+                        label = { Text(stringResource("charset_optional", language)) },
+                        placeholder = { Text(stringResource("select_charset", language)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = charsetExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -222,7 +228,7 @@ fun FieldEditorScreen(
             AppTextField(
                 value = defaultValue,
                 onValueChange = { defaultValue = it },
-                label = "默认值 (可选)",
+                label = stringResource("default_value_optional", language),
                 singleLine = true
             )
 
@@ -230,7 +236,7 @@ fun FieldEditorScreen(
             AppTextField(
                 value = comment,
                 onValueChange = { comment = it },
-                label = "注释 (可选)",
+                label = stringResource("comment_optional", language),
                 modifier = Modifier.height(100.dp),
                 maxLines = 4
             )
@@ -241,7 +247,7 @@ fun FieldEditorScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("允许 NULL")
+                Text(stringResource("allow_null", language))
                 Switch(
                     checked = isNullable,
                     onCheckedChange = { isNullable = it }
@@ -254,7 +260,7 @@ fun FieldEditorScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("自增 (AUTO_INCREMENT)")
+                Text(stringResource("auto_increment_label", language))
                 Switch(
                     checked = isAutoIncrement,
                     onCheckedChange = { isAutoIncrement = it }
@@ -272,15 +278,15 @@ fun FieldEditorScreen(
             icon = {
                 Icon(Icons.Filled.Save, contentDescription = null)
             },
-            title = { Text("确认保存") },
+            title = { Text(stringResource("confirm_save", language)) },
             text = {
                 Column {
-                    Text("字段名：$name")
+                    Text(stringResource("field_name", language) + "：$name")
                     val fullName = if (length.isNotEmpty()) "$typeName($length)" else typeName
-                    Text("类型：$fullName")
-                    if (isNullable) Text("允许 NULL")
-                    if (isAutoIncrement) Text("自增")
-                    if (charset.isNotEmpty()) Text("字符集：$charset")
+                    Text(stringResource("type", language) + "：$fullName")
+                    if (isNullable) Text(stringResource("allow_null", language))
+                    if (isAutoIncrement) Text(stringResource("field_auto_increment", language))
+                    if (charset.isNotEmpty()) Text(stringResource("charset", language) + "：$charset")
                 }
             },
             confirmButton = {
@@ -288,7 +294,7 @@ fun FieldEditorScreen(
                     onClick = {
                         // 验证：需要长度的类型必须指定长度
                         if (typeName in requiresLengthTypes && length.isEmpty()) {
-                            errorMessage = "数据类型 '$typeName' 必须指定长度"
+                            errorMessage = strTypeLengthRequired.replace("{type}", typeName)
                             return@AppButton
                         }
                         isSaving = true
@@ -310,7 +316,7 @@ fun FieldEditorScreen(
                                     onNavigateBack()
                                 },
                                 onFailure = { error ->
-                                    errorMessage = error.message ?: "保存失败，请稍后重试"
+                                    errorMessage = error.message ?: strSaveFailed
                                 }
                             )
                             isSaving = false
@@ -322,15 +328,15 @@ fun FieldEditorScreen(
                     if (isSaving) {
                         SmallLoadingIndicator()
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("保存中...")
+                        Text(stringResource("saving", language))
                     } else {
-                        Text("确认")
+                        Text(stringResource("ok", language))
                     }
                 }
             },
             dismissButton = {
                 AppTextButton(onClick = { showSaveDialog = false }) {
-                    Text("取消")
+                    Text(stringResource("cancel", language))
                 }
             }
         )
@@ -339,10 +345,10 @@ fun FieldEditorScreen(
     // 错误对话框
     errorMessage?.let { msg ->
         AppConfirmDialog(
-            title = "错误",
+            title = stringResource("error", language),
             message = msg,
-            confirmText = "确定",
-            cancelText = "确定",
+            confirmText = stringResource("ok", language),
+            cancelText = stringResource("ok", language),
             onConfirm = { errorMessage = null },
             onDismiss = { errorMessage = null },
             icon = Icons.Filled.Error

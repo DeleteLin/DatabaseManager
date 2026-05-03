@@ -129,8 +129,8 @@ fun MoreScreen(
                                 Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                                 Text(
                                     text = when (lang) {
-                                        Language.CHINESE -> "中文"
-                                        Language.ENGLISH -> "English"
+                                        Language.CHINESE -> stringResource("language_chinese", language)
+                                        Language.ENGLISH -> stringResource("language_english", language)
                                     },
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
@@ -167,7 +167,7 @@ fun MoreScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = if (language == Language.CHINESE) "配置 AI 接口地址和密钥" else "Configure AI API URL and key",
+                        text = stringResource("ai_config_desc", language),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -206,7 +206,7 @@ fun MoreScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = if (language == Language.CHINESE) "UI 规范、颜色、字体、组件展示" else "UI specs, colors, typography, components",
+                        text = stringResource("design_system_desc", language),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -284,7 +284,7 @@ fun MoreScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = if (language == Language.CHINESE) "应用信息、版本、支持的平台和数据库" else "App info, version, supported platforms and databases",
+                        text = stringResource("about_desc", language),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -17,11 +17,13 @@ import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
 import space.xiaoxiao.databasemanager.components.AppCustomDialog
+import space.xiaoxiao.databasemanager.components.AppEmptyState
 import space.xiaoxiao.databasemanager.components.AppLoadingIndicator
 import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.AppPillTabRow
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
+import space.xiaoxiao.databasemanager.components.ListItemSkeleton
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.core.*
@@ -55,6 +57,8 @@ fun StyledTableBrowserScreen(
     val tableStats = viewModel.tableStats
     val connectionState = viewModel.connectionState
     val isManagingTable = viewModel.isManagingTable
+
+    var isLoadingTables by remember { mutableStateOf(false) }
 
     val dialogConnectionState = dialogViewModel.connectionState
     val dialogServerDatabases = dialogViewModel.serverDatabases
@@ -97,15 +101,17 @@ fun StyledTableBrowserScreen(
         if (selectedDatabase != null) {
             // 当主页面已连接到同一个实例时，不重复 disconnect/connect，避免闪空窗期。
             if (selectedDatabaseId != null && viewModel.currentConfigId == selectedDatabaseId) {
+                isLoadingTables = true
                 viewModel.loadTables()
                 viewModel.loadServerDatabases()
+                isLoadingTables = false
             } else {
-                // selectedDatabaseId 发生变化时必须重连并重新加载表
-                // 否则可能拿到旧连接的元数据，表现为“切换后表为空”。
+                isLoadingTables = true
                 viewModel.disconnect()
                 viewModel.connect(selectedDatabase)
                 viewModel.loadTables()
                 viewModel.loadServerDatabases()
+                isLoadingTables = false
             }
         }
     }
@@ -231,13 +237,12 @@ fun StyledTableBrowserScreen(
             }
         }
         if (selectedDatabase == null) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    stringResource("no_database_selected", language),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            AppEmptyState(
+                icon = Icons.Filled.Dns,
+                title = stringResource("no_database_selected", language),
+                message = "",
+                modifier = Modifier.fillMaxSize()
+            )
         } else if (connectionState == ConnectionUiState.CONNECTING) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 AppLoadingIndicator()
@@ -306,6 +311,7 @@ fun StyledTableBrowserScreen(
                             onTableSelected = { tableName ->
                                 selectedTableName = tableName
                             },
+                            isLoadingTables = isLoadingTables,
                             language = language
                         )
                         }
@@ -445,6 +451,7 @@ fun StyledTableBrowserScreen(
                                     selectedTableName = tableName
                                     showDetailOnNarrowScreen = true
                                 },
+                                isLoadingTables = isLoadingTables,
                                 language = language
                             )
                         }
@@ -733,6 +740,7 @@ private fun TableListPanel(
     onSearchTextChange: (String) -> Unit,
     selectedTableName: String?,
     onTableSelected: (String) -> Unit,
+    isLoadingTables: Boolean = false,
     language: Language
 ) {
     AppCard(modifier = modifier, variant = CardVariant.Surface) {
@@ -754,11 +762,19 @@ private fun TableListPanel(
             )
 
             if (tables.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        stringResource("no_tables", language),
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                if (isLoadingTables) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        repeat(5) {
+                            ListItemSkeleton()
+                        }
+                    }
+                } else {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(
+                            stringResource("no_tables", language),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             } else {
                 LazyColumn {
@@ -816,12 +832,12 @@ private fun TableDetailPanel(
 
             val currentTableName = selectedTableName
             if (currentTableName == null) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        stringResource("select_table_to_show_data", language),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
+                AppEmptyState(
+                    icon = Icons.Filled.PanTool,
+                    title = stringResource("select_table_to_show_data", language),
+                    message = "",
+                    modifier = Modifier.fillMaxSize()
+                )
             } else {
                 // Tab 栏
                 val tabs = listOf(
@@ -910,9 +926,12 @@ private fun FieldsTab(
 
             schema?.let { tableSchema ->
                 if (tableSchema.columns.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(stringResource("no_data", language))
-                    }
+                    AppEmptyState(
+                        icon = Icons.Filled.ViewColumn,
+                        title = stringResource("no_data", language),
+                        message = "",
+                        modifier = Modifier.fillMaxSize()
+                    )
                 } else {
                     LazyColumn {
                         items(tableSchema.columns) { column ->
@@ -1064,9 +1083,12 @@ private fun IndexesTab(
             Spacer(modifier = Modifier.height(6.dp))
 
             if (indexes.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(stringResource("no_data", language))
-                }
+                AppEmptyState(
+                    icon = Icons.Filled.Sort,
+                    title = stringResource("no_data", language),
+                    message = "",
+                    modifier = Modifier.fillMaxSize()
+                )
             } else {
                 LazyColumn {
                     items(indexes) { index ->
@@ -1229,9 +1251,12 @@ private fun ForeignKeysTab(
         val foreignKeys = schema?.foreignKeys ?: emptyList()
 
         if (foreignKeys.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource("no_data", language))
-            }
+            AppEmptyState(
+                icon = Icons.Filled.Link,
+                title = stringResource("no_data", language),
+                message = "",
+                modifier = Modifier.fillMaxSize()
+            )
         } else {
             LazyColumn {
                 items(foreignKeys) { fk ->

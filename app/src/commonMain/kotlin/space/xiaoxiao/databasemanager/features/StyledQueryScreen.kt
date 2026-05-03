@@ -2,8 +2,6 @@ package space.xiaoxiao.databasemanager.features
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +15,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,13 +24,14 @@ import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppButton
 import space.xiaoxiao.databasemanager.components.AppCard
 import space.xiaoxiao.databasemanager.components.AppCustomDialog
+import space.xiaoxiao.databasemanager.components.AppEmptyState
 import space.xiaoxiao.databasemanager.components.AppErrorState
 import space.xiaoxiao.databasemanager.components.AppOutlinedButton
+import space.xiaoxiao.databasemanager.components.AppPillTabRow
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.CodeEditor
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
 import space.xiaoxiao.databasemanager.components.EditorLanguage
-import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 import space.xiaoxiao.databasemanager.storage.AiConfigStorage
@@ -93,14 +91,15 @@ fun StyledQueryScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        QueryTabBar(
-            tabs = tabs,
-            selectedTabId = selectedTabId,
-            onSelectTab = { tabManager.selectTab(it) },
-            onCloseTab = { tabManager.closeTab(it) },
+        AppPillTabRow(
+            tabs = tabs.map { it.getDisplayTitle() },
+            selectedIndex = tabs.indexOfFirst { it.id == selectedTabId }.coerceAtLeast(0),
+            onSelectIndex = { tabManager.selectTab(tabs[it].id) },
+            modifier = Modifier.fillMaxWidth(),
+            addTabIcon = Icons.Filled.Add,
+            addTabContentDescription = stringResource("new_tab", language),
             onAddTab = { showCreateTabDialog = true },
-            language = language,
-            modifier = Modifier.fillMaxWidth()
+            onCloseTab = { index -> tabManager.closeTab(tabs[index].id) }
         )
 
         selectedTabId?.let { tabId ->
@@ -125,27 +124,12 @@ fun StyledQueryScreen(
                 )
             }
         } ?: run {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.AddBox,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    )
-                    Text(
-                        text = stringResource("no_tab_hint", language),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
+            AppEmptyState(
+                icon = Icons.Filled.AddBox,
+                title = stringResource("no_tab", language),
+                message = stringResource("no_tab_hint", language),
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 
@@ -188,133 +172,6 @@ fun StyledQueryScreen(
     }
 }
 
-@Composable
-fun QueryTabBar(
-    tabs: List<QueryTab>,
-    selectedTabId: String?,
-    onSelectTab: (String) -> Unit,
-    onCloseTab: (String) -> Unit,
-    onAddTab: () -> Unit,
-    language: Language,
-    modifier: Modifier = Modifier
-) {
-    val scrollState = rememberScrollState()
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceContainerHigh
-    ) {
-        BoxWithConstraints {
-            val isWideScreen = maxWidth > 400.dp
-            Row(
-                modifier = Modifier
-                    .horizontalScroll(scrollState)
-                    .padding(horizontal = 6.dp, vertical = 0.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                tabs.forEach { tab ->
-                    QueryTabItem(
-                        tab = tab,
-                        isSelected = tab.id == selectedTabId,
-                        onSelect = { onSelectTab(tab.id) },
-                        onClose = { onCloseTab(tab.id) },
-                        language = language,
-                        isWideScreen = isWideScreen
-                    )
-                }
-
-                // 添加 Tab 按钮：对齐到胶囊 Tab 的高度/形状
-                val tabShape = RoundedCornerShape(6.dp)
-                Surface(
-                    modifier = Modifier
-                        .height(48.dp)
-                        .clip(tabShape)
-                        .clickable(onClick = onAddTab),
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = tabShape
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(horizontal = 10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Filled.Add,
-                            contentDescription = stringResource("new_tab", language),
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun QueryTabItem(
-    tab: QueryTab,
-    isSelected: Boolean,
-    onSelect: () -> Unit,
-    onClose: () -> Unit,
-    language: Language,
-    isWideScreen: Boolean = true
-) {
-    Surface(
-        modifier = Modifier.height(48.dp)
-            .clip(RoundedCornerShape(6.dp))
-            .clickable(onClick = onSelect),
-        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
-        shape = RoundedCornerShape(6.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = if (isWideScreen) 10.dp else 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            // 连接状态图标
-            Icon(
-                imageVector = when (tab.connectionState) {
-                    ConnectionUiState.CONNECTED -> Icons.Filled.CheckCircle
-                    ConnectionUiState.CONNECTING -> Icons.Filled.Loop
-                    ConnectionUiState.FAILED -> Icons.Filled.Error
-                    else -> Icons.Filled.RadioButtonUnchecked
-                },
-                contentDescription = null,
-                tint = when (tab.connectionState) {
-                    ConnectionUiState.CONNECTED -> MaterialTheme.colorScheme.primary
-                    ConnectionUiState.FAILED -> MaterialTheme.colorScheme.error
-                    else -> MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                modifier = Modifier.size(14.dp)
-            )
-            // 事务状态指示器
-            if (tab.isInTransaction) {
-                Box(
-                    modifier = Modifier.size(6.dp)
-                        .background(MaterialTheme.colorScheme.error, RoundedCornerShape(3.dp))
-                )
-            }
-            Text(
-                text = tab.getDisplayTitle(),
-                style = MaterialTheme.typography.labelMedium,
-                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.widthIn(max = if (isWideScreen) 140.dp else 100.dp)
-            )
-            Icon(
-                Icons.Filled.Close,
-                contentDescription = stringResource("close_tab", language),
-                modifier = Modifier.size(14.dp).clickable(onClick = onClose),
-                tint = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QueryTabContent(
     tab: QueryTab,
@@ -640,6 +497,7 @@ fun QueryTabContent(
             updateResult = lastUpdateResult,
             isExpanded = tab.isResultExpanded,
             autoExpand = tab.autoExpandResult,
+            isExecuting = isExecuting,
             onToggleExpand = { onUpdateTab { t -> t.copy(isResultExpanded = !t.isResultExpanded) } },
             onAutoExpandChange = { onUpdateTab { t -> t.copy(autoExpandResult = it) } },
             language = language,
@@ -654,6 +512,7 @@ fun BottomResultPanel(
     updateResult: UpdateResult?,
     isExpanded: Boolean,
     autoExpand: Boolean,
+    isExecuting: Boolean = false,
     onToggleExpand: () -> Unit,
     onAutoExpandChange: (Boolean) -> Unit,
     language: Language,
@@ -872,7 +731,6 @@ fun BottomResultPanel(
                                 }
                             }
                         } else {
-                            // 展开但无结果时显示空状态
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center

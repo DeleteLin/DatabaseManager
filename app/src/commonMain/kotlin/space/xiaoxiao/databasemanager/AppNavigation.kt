@@ -300,6 +300,7 @@ fun AppNavigation(
                 NavDestination.DATABASE_LIST -> StyledDatabaseListScreen(
                     language = language,
                     databases = databases,
+                    isLoading = !isLoaded,
                     onDatabaseAdd = { configInfo ->
                         databases = databases + configInfo
                     },

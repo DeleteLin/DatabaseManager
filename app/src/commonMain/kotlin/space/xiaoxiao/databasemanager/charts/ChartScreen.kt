@@ -20,6 +20,8 @@ import space.xiaoxiao.databasemanager.core.ExecutionPurpose
 import space.xiaoxiao.databasemanager.components.AppButton
 import space.xiaoxiao.databasemanager.components.AppConfirmDialog
 import space.xiaoxiao.databasemanager.components.AppCustomDialog
+import space.xiaoxiao.databasemanager.components.AppEmptyState
+import space.xiaoxiao.databasemanager.components.AppErrorState
 import space.xiaoxiao.databasemanager.components.AppLoadingIndicator
 import space.xiaoxiao.databasemanager.components.AppPillTabRow
 import space.xiaoxiao.databasemanager.components.AppTextButton
@@ -156,65 +158,22 @@ fun ChartScreen(
             // 内容区域
             if (panels.isEmpty()) {
                 // 空状态 - 无面板
-                Box(
+                AppEmptyState(
+                    icon = Icons.Filled.Dashboard,
+                    title = noChartPanelsStr,
+                    message = addChartPanelHintStr,
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceMd)
-                    ) {
-                        Icon(
-                            Icons.Filled.Dashboard,
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                        )
-                        Text(
-                            text = noChartPanelsStr,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = addChartPanelHintStr,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                        )
-                        AppButton(onClick = { showCreatePanelDialog = true }) {
-                            Icon(Icons.Filled.Add, contentDescription = null)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(stringResource("new_chart_panel", language))
-                        }
-                    }
-                }
+                    actionLabel = stringResource("new_chart_panel", language),
+                    onAction = { showCreatePanelDialog = true }
+                )
             } else if (selectedPanel?.charts?.isEmpty() != false) {
                 // 空状态 - 无图表
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceMd)
-                    ) {
-                        Icon(
-                            Icons.Filled.BarChart,
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                        )
-                        Text(
-                            text = noChartsStr,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = addChartHintStr,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                        )
-                    }
-                }
+                AppEmptyState(
+                    icon = Icons.Filled.BarChart,
+                    title = noChartsStr,
+                    message = addChartHintStr,
+                    modifier = Modifier.fillMaxSize()
+                )
             } else {
                 // 图表网格 - 使用固定 2 列
                 LazyVerticalGrid(
@@ -234,11 +193,13 @@ fun ChartScreen(
                             chartData = chartDataMap[chart.id],
                             isLoading = chartLoadingMap[chart.id] == true,
                             error = chartErrorMap[chart.id],
+                            language = language,
                             onEdit = { onNavigateToEditor(selectedPanel.id, chart) },
                             onDelete = { panelManager.deleteChart(selectedPanel.id, chart.id) },
                             onRefresh = {
                                 refreshChart(chart, databases, chartDataMap, chartLoadingMap, chartErrorMap)
-                            }
+                            },
+                            onDismissError = { chartErrorMap[chart.id] = null }
                         )
                     }
                 }
@@ -402,9 +363,11 @@ private fun ChartCard(
     chartData: ChartData?,
     isLoading: Boolean,
     error: String?,
+    language: Language = Language.CHINESE,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onDismissError: () -> Unit
 ) {
     // 根据图表宽度设置高度
     val cardHeight = when (chart.width) {
@@ -428,10 +391,12 @@ private fun ChartCard(
             ) {
                 when {
                     isLoading -> AppLoadingIndicator()
-                    error != null -> Text(
-                        text = error,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall
+                    error != null -> AppErrorState(
+                        message = error,
+                        onDismiss = onDismissError,
+                        onRetry = onRefresh,
+                        showRetry = false,
+                        language = language
                     )
                     chartData != null -> {
                         when (chart.chartType) {
@@ -451,13 +416,13 @@ private fun ChartCard(
                 horizontalArrangement = Arrangement.spacedBy(0.dp)
             ) {
                 IconButton(onClick = onRefresh, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Filled.Refresh, contentDescription = "刷新", modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Refresh, contentDescription = stringResource("refresh", language), modifier = Modifier.size(16.dp))
                 }
                 IconButton(onClick = onEdit, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Filled.Edit, contentDescription = "编辑", modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Edit, contentDescription = stringResource("edit", language), modifier = Modifier.size(16.dp))
                 }
                 IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Filled.Delete, contentDescription = "删除", modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource("delete", language), modifier = Modifier.size(16.dp))
                 }
             }
         }

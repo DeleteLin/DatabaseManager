@@ -176,7 +176,7 @@ fun AiConfigScreen(
                             onClick = { showPromptEditor = !showPromptEditor }
                         ) {
                             Text(
-                                if (showPromptEditor) "收起" else "编辑",
+                                if (showPromptEditor) stringResource("collapse", language) else stringResource("edit", language),
                                 style = MaterialTheme.typography.labelSmall
                             )
                         }
@@ -187,7 +187,7 @@ fun AiConfigScreen(
                         OutlinedTextField(
                             value = customPromptZh,
                             onValueChange = { customPromptZh = it },
-                            label = { Text("中文提示词") },
+                            label = { Text(stringResource("prompt_chinese", language)) },
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 4,
                             maxLines = 6,
@@ -197,7 +197,7 @@ fun AiConfigScreen(
                         OutlinedTextField(
                             value = customPromptEn,
                             onValueChange = { customPromptEn = it },
-                            label = { Text("English Prompt") },
+                            label = { Text(stringResource("prompt_english", language)) },
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 4,
                             maxLines = 6,

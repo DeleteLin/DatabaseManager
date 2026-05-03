@@ -79,6 +79,7 @@ val chineseStringResources = mapOf(
     "chart_size_full" to "全宽",
     "no_charts" to "暂无图表",
     "add_chart_hint" to "点击右下角按钮添加图表",
+    "chart_hint_text" to "提示：SQL 查询应返回两列或多列，第一列作为标签，第二列作为数值。例如：SELECT category, COUNT(*) FROM products GROUP BY category",
     "preview" to "预览",
     "create" to "创建",
     "nav_more" to "更多",
@@ -86,6 +87,7 @@ val chineseStringResources = mapOf(
 
     // 通用
     "design_system" to "UI 规范",
+    "design_system_desc" to "UI 规范、颜色、字体、组件展示",
     "ok" to "确定",
     "error_unknown" to "未知错误",
     "operation_failed" to "操作失败",
@@ -100,6 +102,10 @@ val chineseStringResources = mapOf(
     "success" to "成功",
     "no_data" to "暂无数据",
     "more" to "更多",
+    "saving" to "保存中...",
+    "save_failed" to "保存失败，请稍后重试",
+    "confirm_save" to "确认保存",
+    "collapse" to "收起",
 
     // 配置备份（更多 -> 二级页面）
     "config_backup" to "配置备份",
@@ -142,6 +148,7 @@ val chineseStringResources = mapOf(
 
     // 关于
     "about" to "关于",
+    "about_desc" to "应用信息、版本、支持的平台和数据库",
 
     // 数据库列表
     "empty_database_list" to "暂无数据库连接",
@@ -190,6 +197,8 @@ val chineseStringResources = mapOf(
 
     // 字符集
     "charset" to "字符集",
+    "charset_default" to "默认",
+    "charset_optional" to "字符集 (可选)",
     "charset_utf8mb4" to "UTF-8 MB4 (推荐)",
     "charset_utf8" to "UTF-8",
     "charset_latin1" to "Latin1",
@@ -258,13 +267,24 @@ val chineseStringResources = mapOf(
     "edit_field" to "编辑字段",
     "delete_field" to "删除字段",
     "field_name" to "字段名",
+    "field_name_empty" to "字段名不能为空",
+    "field_name_exists" to "此字段名已存在",
+    "field_name_exists_template" to "字段名 '{name}' 已存在",
     "field_type" to "字段类型",
+    "data_type" to "数据类型",
+    "type_length_required" to "数据类型 {type} 必须指定长度",
     "field_length" to "长度",
+    "length_optional" to "长度 (可选)",
+    "length_placeholder" to "例如：255",
     "field_nullable" to "允许为空",
+    "allow_null" to "允许 NULL",
     "field_default" to "默认值",
+    "default_value_optional" to "默认值 (可选)",
     "field_comment" to "注释",
+    "comment_optional" to "注释 (可选)",
     "field_primary_key" to "主键",
     "field_auto_increment" to "自增",
+    "auto_increment_label" to "自增 (AUTO_INCREMENT)",
 
     // 索引管理
     "indexes" to "索引",
@@ -328,6 +348,9 @@ val chineseStringResources = mapOf(
     "database_name_empty" to "数据库名称不能为空",
     "database_name_invalid" to "数据库名称包含非法字符",
     "redis_no_database_management" to "Redis 不支持动态数据库管理",
+    "redis_database" to "Redis 数据库",
+    "redis_no_table_support" to "不支持表操作",
+    "redis_use_query_page" to "请使用查询页面执行 Redis 命令",
 
     // 查询页面
     "command_editor" to "命令编辑器",
@@ -357,10 +380,13 @@ val chineseStringResources = mapOf(
     "ai_generate" to "AI 生成语句",
     "ai_config" to "AI 配置",
     "ai_config_menu" to "AI 配置",
+    "ai_config_desc" to "配置 AI 接口地址和密钥",
     "ai_api_type" to "接口类型",
     "ai_base_url" to "接口地址",
     "ai_api_key" to "API 密钥",
     "ai_prompt" to "提示词",
+    "prompt_chinese" to "中文提示词",
+    "prompt_english" to "English Prompt",
     "ai_user_input" to "描述你的需求",
     "ai_generating" to "AI 生成中...",
     "ai_insert" to "插入到编辑器",
@@ -435,6 +461,7 @@ val englishStringResources = mapOf(
     "chart_size_full" to "Full Width",
     "no_charts" to "No charts",
     "add_chart_hint" to "Click the button below to add a chart",
+    "chart_hint_text" to "Tip: SQL query should return two or more columns. The first column is used as labels and the second as values. Example: SELECT category, COUNT(*) FROM products GROUP BY category",
     "preview" to "Preview",
     "create" to "Create",
     "nav_more" to "More",
@@ -442,6 +469,7 @@ val englishStringResources = mapOf(
 
     // Common
     "design_system" to "UI Specs",
+    "design_system_desc" to "UI specs, colors, typography, components",
     "ok" to "OK",
     "error_unknown" to "Unknown error",
     "operation_failed" to "Operation failed",
@@ -456,6 +484,10 @@ val englishStringResources = mapOf(
     "success" to "Success",
     "no_data" to "No data",
     "more" to "More",
+    "saving" to "Saving...",
+    "save_failed" to "Save failed, please try again later",
+    "confirm_save" to "Confirm Save",
+    "collapse" to "Collapse",
 
     // Config backup (More -> second-level page)
     "config_backup" to "Config Backup",
@@ -498,6 +530,7 @@ val englishStringResources = mapOf(
 
     // About
     "about" to "About",
+    "about_desc" to "App info, version, supported platforms and databases",
 
     // Database List
     "empty_database_list" to "No database connections",
@@ -546,6 +579,8 @@ val englishStringResources = mapOf(
 
     // Charset
     "charset" to "Charset",
+    "charset_default" to "Default",
+    "charset_optional" to "Charset (Optional)",
     "charset_utf8mb4" to "UTF-8 MB4 (Recommended)",
     "charset_utf8" to "UTF-8",
     "charset_latin1" to "Latin1",
@@ -614,13 +649,24 @@ val englishStringResources = mapOf(
     "edit_field" to "Edit Field",
     "delete_field" to "Delete Field",
     "field_name" to "Field Name",
+    "field_name_empty" to "Field name cannot be empty",
+    "field_name_exists" to "This field name already exists",
+    "field_name_exists_template" to "Field name '{name}' already exists",
     "field_type" to "Field Type",
+    "data_type" to "Data Type",
+    "type_length_required" to "Data type {type} requires length",
     "field_length" to "Length",
+    "length_optional" to "Length (Optional)",
+    "length_placeholder" to "e.g.: 255",
     "field_nullable" to "Nullable",
+    "allow_null" to "Allow NULL",
     "field_default" to "Default",
+    "default_value_optional" to "Default (Optional)",
     "field_comment" to "Comment",
+    "comment_optional" to "Comment (Optional)",
     "field_primary_key" to "Primary Key",
     "field_auto_increment" to "Auto Increment",
+    "auto_increment_label" to "Auto Increment (AUTO_INCREMENT)",
 
     // Index Management
     "indexes" to "Indexes",
@@ -684,6 +730,9 @@ val englishStringResources = mapOf(
     "database_name_empty" to "Database name cannot be empty",
     "database_name_invalid" to "Database name contains invalid characters",
     "redis_no_database_management" to "Redis does not support dynamic database management",
+    "redis_database" to "Redis Database",
+    "redis_no_table_support" to "Table operations not supported",
+    "redis_use_query_page" to "Use query page to execute Redis commands",
 
     // Query Page
     "command_editor" to "Command Editor",
@@ -713,10 +762,13 @@ val englishStringResources = mapOf(
     "ai_generate" to "AI Generate SQL",
     "ai_config" to "AI Configuration",
     "ai_config_menu" to "AI Configuration",
+    "ai_config_desc" to "Configure AI API URL and key",
     "ai_api_type" to "API Type",
     "ai_base_url" to "Base URL",
     "ai_api_key" to "API Key",
     "ai_prompt" to "Prompt",
+    "prompt_chinese" to "Chinese Prompt",
+    "prompt_english" to "English Prompt",
     "ai_user_input" to "Describe Your Request",
     "ai_generating" to "Generating...",
     "ai_insert" to "Insert to Editor",

@@ -286,7 +286,7 @@ fun DatabaseManageScreen(
                                             }
                                         ) {
                                             Icon(
-                                                Icons.Default.Check,
+                                                Icons.Filled.CheckCircle,
                                                 contentDescription = switchDatabaseTitle,
                                                 tint = MaterialTheme.colorScheme.primary
                                             )
@@ -298,7 +298,7 @@ fun DatabaseManageScreen(
                                         enabled = !isCurrent && !isRedis
                                     ) {
                                         Icon(
-                                            Icons.Default.Delete,
+                                            Icons.Filled.Delete,
                                             contentDescription = deleteTitle,
                                             tint = if (isRedis) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f) else MaterialTheme.colorScheme.error
                                         )

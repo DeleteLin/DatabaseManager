@@ -491,7 +491,7 @@ fun ChartEditorScreen(
                 )
             ) {
                 Text(
-                    text = "提示：SQL 查询应返回两列或多列，第一列作为标签，第二列作为数值。例如：SELECT category, COUNT(*) FROM products GROUP BY category",
+                    text = stringResource("chart_hint_text", language),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(AppSpacing.spaceSm)

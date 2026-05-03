@@ -124,7 +124,7 @@ fun QueryResultTable(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Icon(
-                    Icons.Default.ContentCopy,
+                    Icons.Filled.ContentCopy,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
@@ -231,7 +231,7 @@ fun SimpleQueryResultTable(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Icon(
-                    Icons.Default.ContentCopy,
+                    Icons.Filled.ContentCopy,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )

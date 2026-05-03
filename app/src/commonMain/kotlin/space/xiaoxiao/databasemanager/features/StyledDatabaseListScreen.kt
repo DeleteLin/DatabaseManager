@@ -28,6 +28,7 @@ import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIconWithBackground
 import space.xiaoxiao.databasemanager.components.AppEmptyState
+import space.xiaoxiao.databasemanager.components.DatabaseConnectionCardSkeleton
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +36,7 @@ import space.xiaoxiao.databasemanager.theme.AppSpacing
 fun StyledDatabaseListScreen(
     language: Language = Language.CHINESE,
     databases: List<DatabaseConfigInfo>,
+    isLoading: Boolean = false,
     onDatabaseAdd: (DatabaseConfigInfo) -> Unit,
     onDatabaseEdit: (DatabaseConfigInfo) -> Unit,
     onDatabaseDelete: (DatabaseConfigInfo) -> Unit,
@@ -119,15 +121,32 @@ fun StyledDatabaseListScreen(
                 )
             )
             if (databases.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    AppEmptyState(
-                        icon = AppIcons.databaseEmpty,
-                        title = stringResource("empty_database_list", language),
-                        message = stringResource("add_database_hint", language)
-                    )
+                if (isLoading) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(AppSpacing.spaceMd),
+                        verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceMd)
+                    ) {
+                        items(4) {
+                            AppCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                variant = CardVariant.Default
+                            ) {
+                                DatabaseConnectionCardSkeleton()
+                            }
+                        }
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        AppEmptyState(
+                            icon = AppIcons.databaseEmpty,
+                            title = stringResource("empty_database_list", language),
+                            message = stringResource("add_database_hint", language)
+                        )
+                    }
                 }
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(AppSpacing.spaceMd), verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceMd)) {
