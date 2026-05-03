@@ -1,9 +1,7 @@
 package space.xiaoxiao.databasemanager.charts
 
 import androidx.compose.ui.graphics.Color
-import space.xiaoxiao.databasemanager.core.Column
 import space.xiaoxiao.databasemanager.core.QueryResult
-import space.xiaoxiao.databasemanager.core.Row
 import kotlin.math.roundToInt
 
 /**

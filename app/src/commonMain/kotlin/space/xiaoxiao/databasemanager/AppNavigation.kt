@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.config.AppConfigStorage
 import space.xiaoxiao.databasemanager.features.DatabaseConfigInfo
@@ -33,6 +32,7 @@ import space.xiaoxiao.databasemanager.features.AboutScreen
 import space.xiaoxiao.databasemanager.features.MoreScreen
 import space.xiaoxiao.databasemanager.features.ConfigBackupScreen
 import space.xiaoxiao.databasemanager.features.AiConfigScreen
+import space.xiaoxiao.databasemanager.features.BackupService
 import space.xiaoxiao.databasemanager.charts.ChartScreen
 import space.xiaoxiao.databasemanager.charts.ChartEditorScreen
 import space.xiaoxiao.databasemanager.charts.ChartPanelManager
@@ -45,16 +45,6 @@ import space.xiaoxiao.databasemanager.theme.ThemeState
 import space.xiaoxiao.databasemanager.components.NavIcon
 import space.xiaoxiao.databasemanager.components.SvgNavIcon
 import space.xiaoxiao.databasemanager.storage.AiConfigStorage
-import space.xiaoxiao.databasemanager.storage.SecureStorage
-import space.xiaoxiao.databasemanager.storage.EncryptionManager
-import space.xiaoxiao.databasemanager.backup.BackupCrypto
-import space.xiaoxiao.databasemanager.backup.BackupPayload
-import space.xiaoxiao.databasemanager.storage.ConfigSerializer
-import space.xiaoxiao.databasemanager.storage.SerializableAppConfig
-import space.xiaoxiao.databasemanager.storage.SerializableDatabaseConfig
-import space.xiaoxiao.databasemanager.storage.SerializableQueryHistoryItem
-import space.xiaoxiao.databasemanager.features.SerializableQuerySession
-import space.xiaoxiao.databasemanager.utils.AppExit
 import space.xiaoxiao.databasemanager.utils.FileUtils
 
 /**
@@ -212,7 +202,8 @@ fun AppNavigation(
     databaseConfigStorage: DatabaseConfigStorage,
     queryHistoryStorage: QueryHistoryStorage,
     querySessionStorage: QuerySessionStorage,
-    aiConfigStorage: space.xiaoxiao.databasemanager.storage.AiConfigStorage
+    aiConfigStorage: space.xiaoxiao.databasemanager.storage.AiConfigStorage,
+    backupService: BackupService
 ) {
     val language by localizationState.language.collectAsState()
 
@@ -463,77 +454,9 @@ fun AppNavigation(
                 NavDestination.CONFIG_BACKUP -> ConfigBackupScreen(
                     language = language,
                     onNavigateBack = { navigationState.navigateToMore() },
-                    onExportConfig = { password ->
-                        runCatching {
-                            val payload = BackupPayload(
-                                exportedAtEpochMillis = System.currentTimeMillis(),
-                                appConfig = SerializableAppConfig.fromAppConfig(appConfigStorage.loadConfig()),
-                                databaseConfigs = databaseConfigStorage.loadConfigs().map { db ->
-                                    SerializableDatabaseConfig(
-                                        id = db.id,
-                                        name = db.name,
-                                        type = db.type.name,
-                                        host = db.host,
-                                        port = db.port,
-                                        database = db.database,
-                                        username = db.username,
-                                        plainPassword = db.password
-                                    )
-                                },
-                                aiConfig = aiConfigStorage.loadConfig(),
-                                queryHistory = queryHistoryStorage.getHistory(50).map { SerializableQueryHistoryItem.fromQueryHistoryItem(it) },
-                                querySessions = querySessionStorage.loadSessions().map { SerializableQuerySession.fromQuerySession(it) }
-                            )
-                            val plaintext = ConfigSerializer.json.encodeToString(BackupPayload.serializer(), payload)
-                            val encryptedFileJson = BackupCrypto.encryptToFileJson(plaintext, password)
-                            val ok = FileUtils.saveFile(encryptedFileJson, defaultName = "dbm-config-backup", extension = "dbmconf")
-                            if (!ok) error("Save failed")
-                        }
-                    },
-                    onImportConfig = { password, fileContent ->
-                        runCatching {
-                            val plaintext = BackupCrypto.decryptFromFileJson(fileContent, password)
-                            val payload = ConfigSerializer.json.decodeFromString(BackupPayload.serializer(), plaintext)
-
-                            // Clear existing
-                            databaseConfigStorage.saveConfigs(emptyList())
-                            appConfigStorage.resetToDefault()
-                            aiConfigStorage.deleteConfig()
-                            queryHistoryStorage.clearHistory()
-                            querySessionStorage.clearSessions()
-
-                            // Restore
-                            val restoredDb = payload.databaseConfigs.map { cfg ->
-                                DatabaseConfigInfo(
-                                    id = cfg.id,
-                                    name = cfg.name,
-                                    type = space.xiaoxiao.databasemanager.core.DatabaseType.valueOf(cfg.type),
-                                    host = cfg.host,
-                                    port = cfg.port,
-                                    database = cfg.database,
-                                    username = cfg.username,
-                                    password = cfg.plainPassword ?: (cfg.encryptedPassword ?: ""),
-                                    charset = null
-                                )
-                            }
-                            databaseConfigStorage.saveConfigs(restoredDb)
-                            appConfigStorage.saveConfig(SerializableAppConfig.toAppConfig(payload.appConfig))
-                            payload.aiConfig?.let { aiConfigStorage.saveConfig(it) }
-                            queryHistoryStorage.replaceAll(payload.queryHistory.map { SerializableQueryHistoryItem.toQueryHistoryItem(it) })
-                            payload.querySessions.forEach { querySessionStorage.saveSession(SerializableQuerySession.toQuerySession(it)) }
-
-                            // 导入成功后直接退出应用，下次启动重新按新配置加载
-                            AppExit.exitApp()
-                        }
-                    },
-                    onClearConfigAndExit = {
-                        databaseConfigStorage.saveConfigs(emptyList())
-                        appConfigStorage.resetToDefault()
-                        aiConfigStorage.deleteConfig()
-                        queryHistoryStorage.clearHistory()
-                        querySessionStorage.clearSessions()
-                        AppExit.exitApp()
-                    },
+                    onExportConfig = { password -> backupService.exportConfig(password) },
+                    onImportConfig = { password, fileContent -> backupService.importConfig(password, fileContent) },
+                    onClearConfigAndExit = { backupService.clearConfigAndExit() },
                     pickFile = { FileUtils.pickFile(listOf("dbmconf", "json")) }
                 )
             }

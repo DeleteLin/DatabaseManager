@@ -12,13 +12,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.core.ConnectionStatus
 import space.xiaoxiao.databasemanager.core.DbExecutionChannel
 import space.xiaoxiao.databasemanager.core.ExecutionPurpose
-import space.xiaoxiao.databasemanager.core.QueryResult
 import space.xiaoxiao.databasemanager.components.AppPillTabRow
 import space.xiaoxiao.databasemanager.core.createDatabaseClient
 import space.xiaoxiao.databasemanager.features.DatabaseConfigInfo

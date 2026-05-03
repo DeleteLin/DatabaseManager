@@ -1,7 +1,6 @@
 package space.xiaoxiao.databasemanager.features
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +15,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -148,7 +149,7 @@ fun DatabaseConfigScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource("back", language))
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource("back", language))
                     }
                 },
                 actions = {
@@ -181,7 +182,7 @@ fun DatabaseConfigScreen(
                 placeholder = { Text(stringResource("connection_name_placeholder", language)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                leadingIcon = { Icon(Icons.Filled.Label, contentDescription = null, modifier = Modifier.size(18.dp)) },
+                leadingIcon = { Icon(Icons.AutoMirrored.Filled.Label, contentDescription = null, modifier = Modifier.size(18.dp)) },
                 isError = nameError != null,
                 supportingText = nameError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
             )

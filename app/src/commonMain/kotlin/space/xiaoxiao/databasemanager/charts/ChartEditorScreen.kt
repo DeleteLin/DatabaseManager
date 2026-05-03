@@ -9,6 +9,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ShowChart
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -199,7 +201,7 @@ fun ChartEditorScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource("back", language))
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource("back", language))
                     }
                 },
                 actions = {
@@ -299,7 +301,7 @@ fun ChartEditorScreen(
                     val icon = when (type) {
                         ChartType.BAR -> Icons.Filled.BarChart
                         ChartType.PIE -> Icons.Filled.PieChart
-                        ChartType.LINE -> Icons.Filled.ShowChart
+                        ChartType.LINE -> Icons.AutoMirrored.Filled.ShowChart
                     }
 
                     FilterChip(

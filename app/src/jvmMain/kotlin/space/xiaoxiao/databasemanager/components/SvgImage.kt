@@ -3,8 +3,6 @@ package space.xiaoxiao.databasemanager.components
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import org.jetbrains.compose.resources.painterResource
 import databasemanagerworkspace.app.generated.resources.Res
 import databasemanagerworkspace.app.generated.resources.logo_mysql

@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.remember
 import space.xiaoxiao.databasemanager.config.AppConfigStorage
+import space.xiaoxiao.databasemanager.core.registerPlatformDrivers
+import space.xiaoxiao.databasemanager.features.BackupService
 import space.xiaoxiao.databasemanager.features.DatabaseConfigStorage
 import space.xiaoxiao.databasemanager.features.QueryHistoryStorage
 import space.xiaoxiao.databasemanager.features.QuerySessionStorage
@@ -39,6 +41,9 @@ class MainActivity : ComponentActivity() {
             val querySessionStorage = remember { QuerySessionStorage.create(secureStorage) }
             val aiConfigStorage = remember { AiConfigStorage(secureStorage, encryptionManager) }
 
+            registerPlatformDrivers()
+            val backupService = BackupService(appConfigStorage, databaseConfigStorage, aiConfigStorage, queryHistoryStorage, querySessionStorage)
+
             App(
                 themeState = themeState,
                 localizationState = localizationState,
@@ -46,7 +51,8 @@ class MainActivity : ComponentActivity() {
                 databaseConfigStorage = databaseConfigStorage,
                 queryHistoryStorage = queryHistoryStorage,
                 querySessionStorage = querySessionStorage,
-                aiConfigStorage = aiConfigStorage
+                aiConfigStorage = aiConfigStorage,
+                backupService = backupService
             )
         }
     }

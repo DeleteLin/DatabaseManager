@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.theme.AppSpacing
@@ -34,7 +33,6 @@ import space.xiaoxiao.databasemanager.components.AppCard
 import space.xiaoxiao.databasemanager.components.AppIcons
 import space.xiaoxiao.databasemanager.components.SvgCountryFlag
 import space.xiaoxiao.databasemanager.components.toCountryFlag
-import space.xiaoxiao.databasemanager.utils.FileUtils
 
 /**
  * 更多页面 - 设置和系统功能入口

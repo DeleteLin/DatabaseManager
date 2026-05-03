@@ -4,8 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -81,7 +80,7 @@ fun AppCard(
 fun AppTopBar(
     title: String,
     modifier: Modifier = Modifier,
-    navigationIcon: ImageVector? = Icons.Filled.ArrowBack,
+    navigationIcon: ImageVector? = Icons.AutoMirrored.Filled.ArrowBack,
     onNavigationClick: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(

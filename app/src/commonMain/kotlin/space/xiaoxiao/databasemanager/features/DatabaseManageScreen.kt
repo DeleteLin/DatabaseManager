@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.components.AppBottomSheet
 import space.xiaoxiao.databasemanager.components.AppButton
@@ -31,7 +30,6 @@ import space.xiaoxiao.databasemanager.components.AppTextButton
 import space.xiaoxiao.databasemanager.components.AppTextField
 import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.CardVariant
-import space.xiaoxiao.databasemanager.core.DatabaseConfig
 import space.xiaoxiao.databasemanager.core.DatabaseType
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import space.xiaoxiao.databasemanager.config.AppConfigStorage
+import space.xiaoxiao.databasemanager.features.BackupService
 import space.xiaoxiao.databasemanager.features.DatabaseConfigStorage
 import space.xiaoxiao.databasemanager.features.QueryHistoryStorage
 import space.xiaoxiao.databasemanager.features.QuerySessionStorage
@@ -28,7 +29,8 @@ fun App(
     databaseConfigStorage: DatabaseConfigStorage,
     queryHistoryStorage: QueryHistoryStorage,
     querySessionStorage: QuerySessionStorage,
-    aiConfigStorage: space.xiaoxiao.databasemanager.storage.AiConfigStorage
+    aiConfigStorage: space.xiaoxiao.databasemanager.storage.AiConfigStorage,
+    backupService: BackupService
 ) {
     val colorTheme by themeState.colorTheme.collectAsState()
 
@@ -55,7 +57,8 @@ fun App(
                 databaseConfigStorage = databaseConfigStorage,
                 queryHistoryStorage = queryHistoryStorage,
                 querySessionStorage = querySessionStorage,
-                aiConfigStorage = aiConfigStorage
+                aiConfigStorage = aiConfigStorage,
+                backupService = backupService
             )
         }
     }

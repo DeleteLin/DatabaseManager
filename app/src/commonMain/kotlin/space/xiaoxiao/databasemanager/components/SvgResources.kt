@@ -2,8 +2,6 @@ package space.xiaoxiao.databasemanager.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import space.xiaoxiao.databasemanager.core.DatabaseType
 import space.xiaoxiao.databasemanager.i18n.Language
 

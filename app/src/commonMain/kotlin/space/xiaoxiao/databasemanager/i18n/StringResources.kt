@@ -8,6 +8,17 @@ import androidx.compose.runtime.Composable
  */
 
 /**
+ * 获取字符串资源（非Composable版本，用于ViewModel等非UI层）
+ * @param key 资源键名
+ * @param language 当前语言
+ * @return 对应语言的字符串，如果不存在则返回 key 本身
+ */
+fun getString(key: String, language: Language = Language.CHINESE): String {
+    val resources = if (language == Language.CHINESE) chineseStringResources else englishStringResources
+    return resources[key] ?: key
+}
+
+/**
  * 获取字符串资源
  * @param key 资源键名
  * @param language 当前语言
@@ -76,6 +87,9 @@ val chineseStringResources = mapOf(
     // 通用
     "design_system" to "UI 规范",
     "ok" to "确定",
+    "error_unknown" to "未知错误",
+    "operation_failed" to "操作失败",
+    "not_connected" to "未连接",
     "cancel" to "取消",
     "save" to "保存",
     "delete" to "删除",
@@ -429,6 +443,9 @@ val englishStringResources = mapOf(
     // Common
     "design_system" to "UI Specs",
     "ok" to "OK",
+    "error_unknown" to "Unknown error",
+    "operation_failed" to "Operation failed",
+    "not_connected" to "Not connected",
     "cancel" to "Cancel",
     "save" to "Save",
     "delete" to "Delete",

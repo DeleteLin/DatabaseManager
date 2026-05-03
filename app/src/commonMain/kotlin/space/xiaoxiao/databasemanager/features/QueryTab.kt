@@ -1,6 +1,9 @@
 package space.xiaoxiao.databasemanager.features
 
+import androidx.compose.runtime.Immutable
 import space.xiaoxiao.databasemanager.core.QueryResult
+import space.xiaoxiao.databasemanager.i18n.Language
+import space.xiaoxiao.databasemanager.i18n.getString
 import java.util.UUID
 
 enum class TransactionMode { AUTO, MANUAL }
@@ -13,24 +16,25 @@ enum class TransactionIsolationLevel(val value: Int, val displayNameKey: String)
     companion object { fun fromValue(value: Int) = entries.find { it.value == value } ?: READ_COMMITTED }
 }
 
+@Immutable
 data class QueryTab(
     val id: String = UUID.randomUUID().toString(),
-    var sessionName: String = "",
-    var sql: String = "",
-    var selectedText: String = "",
-    var databaseId: String? = null,
-    var databaseConfig: DatabaseConfigInfo? = null,
-    var connectionState: ConnectionUiState = ConnectionUiState.DISCONNECTED,
-    var queryResult: QueryResult? = null,
-    var errorMessage: String? = null,
-    var transactionMode: TransactionMode = TransactionMode.AUTO,
-    var transactionIsolationLevel: TransactionIsolationLevel = TransactionIsolationLevel.READ_COMMITTED,
-    var isInTransaction: Boolean = false,
-    var isResultExpanded: Boolean = false,
-    var autoExpandResult: Boolean = true
+    val sessionName: String = "",
+    val sql: String = "",
+    val selectedText: String = "",
+    val databaseId: String? = null,
+    val databaseConfig: DatabaseConfigInfo? = null,
+    val connectionState: ConnectionUiState = ConnectionUiState.DISCONNECTED,
+    val queryResult: QueryResult? = null,
+    val errorMessage: String? = null,
+    val transactionMode: TransactionMode = TransactionMode.AUTO,
+    val transactionIsolationLevel: TransactionIsolationLevel = TransactionIsolationLevel.READ_COMMITTED,
+    val isInTransaction: Boolean = false,
+    val isResultExpanded: Boolean = false,
+    val autoExpandResult: Boolean = true
 ) {
-    fun getDisplayTitle(): String {
-        val dbName = databaseConfig?.name ?: "未连接"
+    fun getDisplayTitle(language: Language = Language.CHINESE): String {
+        val dbName = databaseConfig?.name ?: getString("disconnected", language)
         return if (sessionName.isNotBlank()) {
             "$dbName · $sessionName"
         } else {

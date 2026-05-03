@@ -1,10 +1,10 @@
 package space.xiaoxiao.databasemanager.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,9 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.core.DatabaseType
 import space.xiaoxiao.databasemanager.i18n.Language
@@ -111,7 +109,7 @@ object AppIcons {
     val check = Icons.Filled.Check
     val checkCircle = Icons.Filled.CheckCircle
     val playArrow = Icons.Filled.PlayArrow
-    val arrowBack = Icons.Filled.ArrowBack
+    val arrowBack = Icons.AutoMirrored.Filled.ArrowBack
     val chevronRight = Icons.Filled.ChevronRight
     val info = Icons.Filled.Info
     val language = Icons.Filled.Language

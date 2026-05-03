@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import space.xiaoxiao.databasemanager.config.AppConfig
 import space.xiaoxiao.databasemanager.storage.SerializableQuerySessionLite
 
@@ -137,9 +136,8 @@ class QueryTabManager(
         val currentTabs = _tabs.value.toMutableList()
         val tabIndex = currentTabs.indexOfFirst { it.id == tabId }
         if (tabIndex >= 0) {
-            // 同步清理 ViewModel 资源
             tabViewModels[tabId]?.let { vm ->
-                runBlocking {
+                cleanupScope.launch {
                     vm.close()
                 }
             }

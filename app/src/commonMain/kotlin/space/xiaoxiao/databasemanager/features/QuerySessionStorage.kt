@@ -1,7 +1,6 @@
 package space.xiaoxiao.databasemanager.features
 
 import kotlinx.serialization.Serializable
-import space.xiaoxiao.databasemanager.storage.ConfigSerializer
 import space.xiaoxiao.databasemanager.storage.SerializableDatabaseConfig
 
 /**

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
-import space.xiaoxiao.databasemanager.components.StyledEmptyState
 import space.xiaoxiao.databasemanager.components.StyledErrorState
 import space.xiaoxiao.databasemanager.components.AppIcons
 import space.xiaoxiao.databasemanager.components.CodeEditor
@@ -34,11 +34,9 @@ import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 import space.xiaoxiao.databasemanager.storage.AiConfigStorage
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import space.xiaoxiao.databasemanager.core.*
 import space.xiaoxiao.databasemanager.utils.KeyboardUtils
 import space.xiaoxiao.databasemanager.utils.FileUtils
-import space.xiaoxiao.databasemanager.utils.Platform
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -506,7 +504,7 @@ fun QueryTabContent(
                                             showTemplateSelector = true
                                         },
                                         leadingIcon = {
-                                            Icon(Icons.Filled.List, contentDescription = null)
+                                            Icon(Icons.AutoMirrored.Filled.List, contentDescription = null)
                                         }
                                     )
                                     DropdownMenuItem(

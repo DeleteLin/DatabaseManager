@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.platform.LocalDensity
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
@@ -45,17 +44,17 @@ fun StyledTableBrowserScreen(
     // 窄屏模式下的导航状态：true=显示详情，false=显示列表
     var showDetailOnNarrowScreen by remember { mutableStateOf(false) }
 
-    val tables by derivedStateOf { viewModel.tables }
-    val tableSchema by derivedStateOf { viewModel.tableSchema }
-    val databaseType by derivedStateOf { viewModel.databaseType }
-    val isRedis by derivedStateOf { databaseType == DatabaseType.REDIS }
-    val indexes by derivedStateOf { viewModel.indexes }
-    val tableStats by derivedStateOf { viewModel.tableStats }
-    val connectionState by derivedStateOf { viewModel.connectionState }
-    val isManagingTable by derivedStateOf { viewModel.isManagingTable }
+    val tables = viewModel.tables
+    val tableSchema = viewModel.tableSchema
+    val databaseType = viewModel.databaseType
+    val isRedis = databaseType == DatabaseType.REDIS
+    val indexes = viewModel.indexes
+    val tableStats = viewModel.tableStats
+    val connectionState = viewModel.connectionState
+    val isManagingTable = viewModel.isManagingTable
 
-    val dialogConnectionState by derivedStateOf { dialogViewModel.connectionState }
-    val dialogServerDatabases by derivedStateOf { dialogViewModel.serverDatabases }
+    val dialogConnectionState = dialogViewModel.connectionState
+    val dialogServerDatabases = dialogViewModel.serverDatabases
 
     // 对话框状态
     var showCreateTableDialog by remember { mutableStateOf(false) }
@@ -68,7 +67,7 @@ fun StyledTableBrowserScreen(
 
     // 编辑字段状态
     var editingColumn by remember { mutableStateOf<ColumnDefinition?>(null) }
-    val isEditMode by derivedStateOf { editingColumn != null }
+    val isEditMode = editingColumn != null
 
     val filteredTables = tables.filter { it.name.contains(searchText, ignoreCase = true) }
 
@@ -817,7 +816,7 @@ private fun TableDetailPanel(
                     title = { Text(selectedTableName) },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = stringResource("back", language))
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource("back", language))
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(

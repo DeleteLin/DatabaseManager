@@ -13,13 +13,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
-import space.xiaoxiao.databasemanager.core.DatabaseType
-
 import space.xiaoxiao.databasemanager.components.AppCard
 import space.xiaoxiao.databasemanager.components.AppDivider
 import space.xiaoxiao.databasemanager.components.AppIconButton
@@ -28,7 +25,6 @@ import space.xiaoxiao.databasemanager.components.AppTextButton
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIconWithBackground
-import space.xiaoxiao.databasemanager.components.ErrorDialog
 import space.xiaoxiao.databasemanager.components.StyledEmptyState
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 
