@@ -15,6 +15,7 @@ class JdbcExecutionContext(
     override val config: DatabaseConfig
 ) : DbExecutionContext {
 
+    @Volatile
     internal var connection: Connection? = null
 
     override val databaseType: DatabaseType

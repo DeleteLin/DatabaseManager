@@ -14,7 +14,9 @@ class RedisExecutionContext(
     override val config: DatabaseConfig
 ) : DbExecutionContext {
 
+    @Volatile
     internal var jedis: Jedis? = null
+    @Volatile
     internal var currentDbIndex: Int = 0
 
     override val databaseType: DatabaseType = DatabaseType.REDIS

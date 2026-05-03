@@ -333,56 +333,13 @@ interface DbExecutionContext {
  *
  * 未来如需接入其他关系型（例如 SQLServer、Oracle），可实现此接口
  */
-interface RelationalMetadataOperations {
-    // ==================== 表结构操作 ====================
-    suspend fun listTables(schema: String? = null): Result<List<TableInfo>>
-    suspend fun getTableSchema(tableName: String, schema: String? = null): Result<TableSchema>
-
-    // ==================== 数据/统计 ====================
-    suspend fun getTableData(
-        tableName: String,
-        schema: String? = null,
-        limit: Int = 100,
-        offset: Int = 0
-    ): Result<QueryResult>
-    suspend fun getTableStats(tableName: String, schema: String? = null): Result<TableStats>
-    suspend fun getDatabaseSize(): Result<Long>
-
-    // ==================== 事务管理 ====================
-    suspend fun beginTransaction(): Result<Unit>
-    suspend fun commitTransaction(): Result<Unit>
-    suspend fun rollbackTransaction(): Result<Unit>
-    suspend fun setTransactionIsolation(level: Int): Result<Unit>
-
-    // ==================== 表管理 ====================
-    suspend fun createTable(definition: TableDefinition, schema: String? = null): Result<Unit>
-    suspend fun dropTable(tableName: String, schema: String? = null): Result<Unit>
-    suspend fun renameTable(oldName: String, newName: String, schema: String? = null): Result<Unit>
-    suspend fun truncateTable(tableName: String, schema: String? = null): Result<Unit>
-
-    // ==================== 字段管理 ====================
-    suspend fun addColumn(tableName: String, column: ColumnDefinition, schema: String? = null): Result<Unit>
-    suspend fun modifyColumn(tableName: String, modification: ColumnModification, schema: String? = null): Result<Unit>
-    suspend fun dropColumn(tableName: String, columnName: String, schema: String? = null): Result<Unit>
-
-    // ==================== 索引管理 ====================
-    suspend fun getIndexes(tableName: String, schema: String? = null): Result<List<IndexInfo>>
-    suspend fun createIndex(
-        tableName: String,
-        indexName: String,
-        columns: List<String>,
-        isUnique: Boolean,
-        schema: String? = null
-    ): Result<Unit>
-    suspend fun dropIndex(tableName: String, indexName: String, schema: String? = null): Result<Unit>
-
-    // ==================== 数据库管理 ====================
-    suspend fun listDatabases(): Result<List<String>>
-    suspend fun switchDatabase(database: String): Result<Unit>
-    suspend fun getCurrentDatabase(): Result<String>
-    suspend fun createDatabase(name: String, charset: String? = null): Result<Unit>
-    suspend fun dropDatabase(name: String): Result<Unit>
-}
+interface RelationalMetadataOperations :
+    TableOperations,
+    TableAdminOperations,
+    ColumnOperations,
+    IndexOperations,
+    TransactionOperations,
+    DatabaseAdminOperations
 
 /**
  * 键值型数据库能力接口（当前主要是 Redis）
@@ -404,24 +361,6 @@ interface KeyValueMetadataOperations {
 }
 
 /**
- * 关系型数据库客户端：通用命令 + 业务元数据
- */
-data class RelationalClient(
-    val context: DbExecutionContext,
-    val executor: CommandExecutor,
-    val metadata: RelationalMetadataOperations
-)
-
-/**
- * 键值型数据库客户端：通用命令 + 业务元数据
- */
-data class KeyValueClient(
-    val context: DbExecutionContext,
-    val executor: CommandExecutor,
-    val metadata: KeyValueMetadataOperations
-)
-
-/**
  * 顶层数据库客户端类型，用于区分关系型 / 键值型
  */
 sealed class DatabaseClient {
@@ -440,5 +379,3 @@ sealed class DatabaseClient {
         val metadata: KeyValueMetadataOperations
     ) : DatabaseClient()
 }
-
-expect fun createDatabaseClient(config: DatabaseConfig): DatabaseClient

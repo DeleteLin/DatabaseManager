@@ -2,11 +2,6 @@ package space.xiaoxiao.databasemanager.core
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import redis.clients.jedis.Jedis
-import redis.clients.jedis.Protocol
-import redis.clients.jedis.commands.ProtocolCommand
-import redis.clients.jedis.util.SafeEncoder
-import redis.clients.jedis.exceptions.JedisException
 
 /**
  * Redis 元数据实现
