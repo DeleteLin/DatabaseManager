@@ -33,7 +33,10 @@ import space.xiaoxiao.databasemanager.features.MoreScreen
 import space.xiaoxiao.databasemanager.features.ConfigBackupScreen
 import space.xiaoxiao.databasemanager.features.AiConfigScreen
 import space.xiaoxiao.databasemanager.features.BackupService
+import space.xiaoxiao.databasemanager.features.TableCreateScreen
+import space.xiaoxiao.databasemanager.core.DatabaseType
 import space.xiaoxiao.databasemanager.charts.ChartScreen
+import space.xiaoxiao.databasemanager.charts.ChartCreateScreen
 import space.xiaoxiao.databasemanager.charts.ChartEditorScreen
 import space.xiaoxiao.databasemanager.charts.ChartPanelManager
 import space.xiaoxiao.databasemanager.charts.ChartConfig
@@ -62,7 +65,9 @@ enum class NavDestination {
     DATABASE_CONFIG,
     DATABASE_MANAGE,
     AI_CONFIG,
-    CONFIG_BACKUP
+    CONFIG_BACKUP,
+    TABLE_CREATE,
+    CHART_CREATE
 }
 
 /**
@@ -91,6 +96,9 @@ class AppNavigationState {
         private set
 
     var currentManagingDatabase by mutableStateOf<DatabaseConfigInfo?>(null)
+        private set
+
+    var currentTableCreateDatabaseType by mutableStateOf<DatabaseType?>(null)
         private set
 
     // 图表编辑器状态
@@ -152,6 +160,16 @@ class AppNavigationState {
         currentDestination = NavDestination.CHART_EDITOR
     }
 
+    fun navigateToTableCreate(databaseType: DatabaseType) {
+        currentTableCreateDatabaseType = databaseType
+        currentDestination = NavDestination.TABLE_CREATE
+    }
+
+    fun navigateToChartCreate(panelId: String) {
+        chartPanelId = panelId
+        currentDestination = NavDestination.CHART_CREATE
+    }
+
     fun navigateToAiConfig() {
         currentDestination = NavDestination.AI_CONFIG
     }
@@ -171,6 +189,10 @@ class AppNavigationState {
     fun clearChartEditorState() {
         chartPanelId = null
         chartToEdit = null
+    }
+
+    fun clearTableCreateState() {
+        currentTableCreateDatabaseType = null
     }
 
     fun isMainScreen(): Boolean = currentDestination in listOf(
@@ -352,7 +374,11 @@ fun AppNavigation(
                     databases = databases,
                     panelManager = panelManager,
                     onNavigateToEditor = { panelId, chart ->
-                        navigationState.navigateToChartEditor(panelId, chart)
+                        if (chart == null) {
+                            navigationState.navigateToChartCreate(panelId)
+                        } else {
+                            navigationState.navigateToChartEditor(panelId, chart)
+                        }
                     }
                 )
 
@@ -376,6 +402,24 @@ fun AppNavigation(
                                 }
                                 navigationState.clearChartEditorState()
                                 navigationState.navigateToChart()
+                            }
+                        )
+                    }
+                }
+
+                NavDestination.CHART_CREATE -> {
+                    val panelId = navigationState.chartPanelId
+                    if (panelId != null) {
+                        ChartCreateScreen(
+                            language = language,
+                            databases = databases,
+                            panelId = panelId,
+                            onNavigateBack = {
+                                navigationState.clearChartEditorState()
+                                navigationState.navigateToChart()
+                            },
+                            onChartSaved = { chart ->
+                                panelManager.addChart(panelId, chart)
                             }
                         )
                     }
@@ -460,6 +504,26 @@ fun AppNavigation(
                     onClearConfigAndExit = { backupService.clearConfigAndExit() },
                     pickFile = { FileUtils.pickFile(listOf("dbmconf", "json")) }
                 )
+
+                NavDestination.TABLE_CREATE -> {
+                    val dbType = navigationState.currentTableCreateDatabaseType
+                    if (dbType != null) {
+                        TableCreateScreen(
+                            language = language,
+                            databaseType = dbType,
+                            onNavigateBack = {
+                                navigationState.clearTableCreateState()
+                                navigationState.navigateToTableBrowser()
+                            },
+                            onTableCreated = { tableName ->
+                                navigationState.clearTableCreateState()
+                                navigationState.navigateToTableBrowser()
+                            }
+                        )
+                    }
+                }
+
+                NavDestination.CHART_CREATE -> Text("Chart Create (placeholder)")
             }
         }
     }

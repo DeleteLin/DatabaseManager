@@ -27,6 +27,8 @@ import space.xiaoxiao.databasemanager.components.AppPillTabRow
 import space.xiaoxiao.databasemanager.components.AppTextButton
 import space.xiaoxiao.databasemanager.components.AppTextField
 import space.xiaoxiao.databasemanager.components.ButtonVariant
+import space.xiaoxiao.databasemanager.components.SpeedDialAction
+import space.xiaoxiao.databasemanager.components.SpeedDialFAB
 import space.xiaoxiao.databasemanager.core.createDatabaseClient
 import space.xiaoxiao.databasemanager.features.DatabaseConfigInfo
 import space.xiaoxiao.databasemanager.i18n.Language
@@ -57,6 +59,7 @@ fun ChartScreen(
     var panelToRename by remember { mutableStateOf<ChartPanel?>(null) }
     var panelToDelete by remember { mutableStateOf<ChartPanel?>(null) }
     var newPanelName by remember { mutableStateOf("") }
+    var isSpeedDialExpanded by remember { mutableStateOf(false) }
 
     // 图表数据缓存
     val chartDataMap = remember { mutableStateMapOf<String, ChartData>() }
@@ -79,27 +82,19 @@ fun ChartScreen(
     val addChartPanelHintStr = stringResource("add_chart_panel_hint", language)
     val noChartsStr = stringResource("no_charts", language)
     val addChartHintStr = stringResource("add_chart_hint", language)
-    val addChartStr = stringResource("add_chart", language)
     val editChartStr = stringResource("edit_chart", language)
     val deleteChartStr = stringResource("delete_chart", language)
     val newChartPanelContentDesc = stringResource("new_chart_panel", language)
 
-    Scaffold(
-        floatingActionButton = {
-            if (selectedPanel != null) {
-                ExtendedFloatingActionButton(
-                    onClick = { onNavigateToEditor(selectedPanel.id, null) },
-                    icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                    text = { Text(addChartStr) }
-                )
-            }
-        }
-    ) { paddingValues ->
-        Column(
+    Scaffold { paddingValues ->
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
             // Tab 栏
             if (panels.isNotEmpty()) {
                 Row(
@@ -116,42 +111,7 @@ fun ChartScreen(
                         addTabContentDescription = newChartPanelContentDesc,
                         onAddTab = { showCreatePanelDialog = true }
                     )
-                    // 选中面板的操作按钮
-                    if (selectedPanel != null) {
-                        Row(
-                            modifier = Modifier.padding(end = AppSpacing.spaceSm),
-                            horizontalArrangement = Arrangement.spacedBy(0.dp)
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    panelToRename = selectedPanel
-                                    newPanelName = selectedPanel.name
-                                    showRenamePanelDialog = true
-                                },
-                                modifier = Modifier.size(36.dp)
-                            ) {
-                                Icon(
-                                    Icons.Filled.Edit,
-                                    contentDescription = stringResource("rename_panel", language),
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                            IconButton(
-                                onClick = {
-                                    panelToDelete = selectedPanel
-                                    showDeletePanelDialog = true
-                                },
-                                modifier = Modifier.size(36.dp)
-                            ) {
-                                Icon(
-                                    Icons.Filled.Close,
-                                    contentDescription = stringResource("delete_panel", language),
-                                    modifier = Modifier.size(18.dp),
-                                    tint = MaterialTheme.colorScheme.error
-                                )
-                            }
-                        }
-                    }
+
                 }
             }
 
@@ -205,7 +165,31 @@ fun ChartScreen(
                 }
             }
         }
+
+        // SpeedDialFAB - 悬浮快捷操作
+        if (selectedPanel != null) {
+            SpeedDialFAB(
+                mainIcon = Icons.Filled.Add,
+                actions = listOf(
+                    SpeedDialAction(Icons.Filled.AddChart, "添加图表") {
+                        onNavigateToEditor(selectedPanel.id, null)
+                    },
+                    SpeedDialAction(Icons.Filled.Edit, "重命名面板") {
+                        panelToRename = selectedPanel
+                        newPanelName = selectedPanel.name
+                        showRenamePanelDialog = true
+                    },
+                    SpeedDialAction(Icons.Filled.Delete, "删除面板") {
+                        panelToDelete = selectedPanel
+                        showDeletePanelDialog = true
+                    }
+                ),
+                isExpanded = isSpeedDialExpanded,
+                onToggle = { isSpeedDialExpanded = !isSpeedDialExpanded }
+            )
+        }
     }
+}
 
     // 创建面板对话框
     if (showCreatePanelDialog) {
