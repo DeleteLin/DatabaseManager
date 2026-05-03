@@ -16,6 +16,7 @@ import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
 import space.xiaoxiao.databasemanager.components.CardVariant
+import space.xiaoxiao.databasemanager.components.AppCustomDialog
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 
@@ -33,79 +34,63 @@ fun CreateTabDialog(
     var sessionName by remember { mutableStateOf("") }
     var showDbSelector by remember { mutableStateOf(false) }
 
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(text = stringResource("new_query_session", language)) },
-        text = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                // 数据库选择
-                Column {
-                    Text(
-                        text = stringResource("select_database", language),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+    AppCustomDialog(
+        title = stringResource("new_query_session", language),
+        confirmText = stringResource("create", language),
+        cancelText = stringResource("cancel", language),
+        onConfirm = { selectedDb?.let { onCreate(it, sessionName) } },
+        onDismiss = onDismissRequest,
+        content = {
+            // 数据库选择
+            Column {
+                Text(
+                    text = stringResource("select_database", language),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    value = selectedDb?.name ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    enabled = false,
+                    label = { Text(text = stringResource("select_database", language)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(enabled = true) { showDbSelector = true },
+                    shape = RoundedCornerShape(10.dp),
+                    trailingIcon = {
+                        Icon(Icons.Filled.ArrowDropDown, null)
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    OutlinedTextField(
-                        value = selectedDb?.name ?: "",
-                        onValueChange = {},
-                        readOnly = true,
-                        enabled = false,
-                        label = { Text(text = stringResource("select_database", language)) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(enabled = true) { showDbSelector = true },
-                        shape = RoundedCornerShape(10.dp),
-                        trailingIcon = {
-                            Icon(Icons.Filled.ArrowDropDown, null)
-                        },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            disabledBorderColor = MaterialTheme.colorScheme.outline,
-                            disabledTextColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    )
-                }
+                )
+            }
 
-                // Session 名输入
-                Column {
-                    Text(
-                        text = stringResource("session_name", language),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+            // Session 名输入
+            Column {
+                Text(
+                    text = stringResource("session_name", language),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                OutlinedTextField(
+                    value = sessionName,
+                    onValueChange = { sessionName = it },
+                    label = { Text(text = stringResource("session_name", language)) },
+                    placeholder = { Text(text = stringResource("session_name_placeholder", language)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    OutlinedTextField(
-                        value = sessionName,
-                        onValueChange = { sessionName = it },
-                        label = { Text(text = stringResource("session_name", language)) },
-                        placeholder = { Text(text = stringResource("session_name_placeholder", language)) },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                        )
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = { selectedDb?.let { onCreate(it, sessionName) } },
-                enabled = selectedDb != null,
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Text(text = stringResource("create", language))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest, shape = RoundedCornerShape(10.dp)) {
-                Text(text = stringResource("cancel", language))
+                )
             }
         }
     )

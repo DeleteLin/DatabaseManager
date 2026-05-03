@@ -29,6 +29,11 @@ import space.xiaoxiao.databasemanager.core.createDatabaseClient
 import space.xiaoxiao.databasemanager.features.DatabaseConfigInfo
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
+import space.xiaoxiao.databasemanager.components.AppButton
+import space.xiaoxiao.databasemanager.components.AppTextButton
+import space.xiaoxiao.databasemanager.components.AppTextField
+import space.xiaoxiao.databasemanager.components.AppTopBar
+import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
@@ -192,20 +197,12 @@ fun ChartEditorScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        if (chartToEdit != null) stringResource("edit_chart", language)
-                        else stringResource("add_chart", language)
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource("back", language))
-                    }
-                },
+            AppTopBar(
+                title = if (chartToEdit != null) stringResource("edit_chart", language)
+                        else stringResource("add_chart", language),
+                onNavigationClick = onNavigateBack,
                 actions = {
-                    TextButton(
+                    AppTextButton(
                         onClick = { handleSave() },
                         enabled = title.isNotBlank() && selectedDbId.isNotBlank() && sqlQuery.text.isNotBlank()
                     ) {
@@ -224,13 +221,12 @@ fun ChartEditorScreen(
             verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceMd)
         ) {
             // 图表标题
-            OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
-                label = { Text(chartTitleStr) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
+            AppTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = chartTitleStr,
+                        singleLine = true
+                    )
 
             // 数据库选择
             ExposedDropdownMenuBox(
@@ -435,17 +431,13 @@ fun ChartEditorScreen(
             }
 
             // 预览按钮
-            Button(
+            AppButton(
                 onClick = { executePreview() },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isExecuting && selectedDb != null && sqlQuery.text.isNotBlank()
             ) {
                 if (isExecuting) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(18.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    SmallLoadingIndicator()
                     Spacer(modifier = Modifier.width(8.dp))
                 } else {
                     Icon(Icons.Filled.Preview, contentDescription = null)

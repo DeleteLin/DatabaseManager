@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppConfirmDialog
 import space.xiaoxiao.databasemanager.components.ConnectionInfoChip
 import space.xiaoxiao.databasemanager.components.AppDivider
 import space.xiaoxiao.databasemanager.components.AppIconButton
@@ -26,7 +27,7 @@ import space.xiaoxiao.databasemanager.components.AppTextButton
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIconWithBackground
-import space.xiaoxiao.databasemanager.components.StyledEmptyState
+import space.xiaoxiao.databasemanager.components.AppEmptyState
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,51 +49,17 @@ fun StyledDatabaseListScreen(
 
     // 删除确认对话框
     pendingDeleteDatabase?.let { database ->
-        AlertDialog(
-            onDismissRequest = { pendingDeleteDatabase = null },
-            icon = {
-                Icon(
-                    Icons.Filled.Warning,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.size(32.dp)
-                )
+        AppConfirmDialog(
+            title = stringResource("confirm_delete_database", language),
+            message = stringResource("delete_database_warning", language) + "\n\n" + stringResource("delete_session_warning", language),
+            confirmText = stringResource("delete", language),
+            cancelText = stringResource("cancel", language),
+            onConfirm = {
+                onDatabaseDelete(database)
+                pendingDeleteDatabase = null
             },
-            title = {
-                Text(stringResource("confirm_delete_database", language))
-            },
-            text = {
-                Column {
-                    Text(
-                        text = stringResource("delete_database_warning", language),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource("delete_session_warning", language),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        onDatabaseDelete(database)
-                        pendingDeleteDatabase = null
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text(stringResource("delete", language))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { pendingDeleteDatabase = null }) {
-                    Text(stringResource("cancel", language))
-                }
-            }
+            onDismiss = { pendingDeleteDatabase = null },
+            isDangerous = true
         )
     }
 
@@ -156,7 +123,7 @@ fun StyledDatabaseListScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    StyledEmptyState(
+                    AppEmptyState(
                         icon = AppIcons.databaseEmpty,
                         title = stringResource("empty_database_list", language),
                         message = stringResource("add_database_hint", language)

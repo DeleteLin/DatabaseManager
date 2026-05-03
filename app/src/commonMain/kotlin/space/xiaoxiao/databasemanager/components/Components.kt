@@ -125,51 +125,6 @@ object AppIcons {
     val palette = Icons.Filled.Palette
 }
 
-/**
- * 空状态组件 - 使用新设计系统
- */
-@Composable
-@Deprecated("Use AppEmptyState from DesignSystem.kt", ReplaceWith("AppEmptyState(icon, title, message, modifier, actionLabel, onAction)", "space.xiaoxiao.databasemanager.components.AppEmptyState"))
-fun StyledEmptyState(
-    icon: ImageVector,
-    title: String,
-    message: String,
-    modifier: Modifier = Modifier,
-    actionLabel: String? = null,
-    onAction: (() -> Unit)? = null,
-    language: Language = Language.CHINESE
-) {
-    AppEmptyState(
-        icon = icon,
-        title = title,
-        message = message,
-        modifier = modifier,
-        actionLabel = actionLabel,
-        onAction = onAction
-    )
-}
-
-/**
- * 错误状态组件 - 使用新设计系统
- */
-@Composable
-@Deprecated("Use AppErrorState from DesignSystem.kt", ReplaceWith("AppErrorState(message, onDismiss, onRetry, modifier, language, showRetry)", "space.xiaoxiao.databasemanager.components.AppErrorState"))
-fun StyledErrorState(
-    message: String,
-    icon: ImageVector,
-    onDismiss: () -> Unit,
-    onRetry: () -> Unit,
-    language: Language = Language.CHINESE,
-    modifier: Modifier = Modifier
-) {
-    AppErrorState(
-        message = message,
-        onDismiss = onDismiss,
-        onRetry = onRetry,
-        modifier = modifier,
-        language = language
-    )
-}
 
 /**
  * 错误提示对话框 - 用于二级页面显示错误

@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.components.AppBottomSheet
 import space.xiaoxiao.databasemanager.components.AppButton
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppConfirmDialog
 import space.xiaoxiao.databasemanager.components.AppEmptyState
 import space.xiaoxiao.databasemanager.components.AppIconButton
 import space.xiaoxiao.databasemanager.components.AppTextButton
@@ -312,79 +313,60 @@ fun DatabaseManageScreen(
     }
 
     errorMessage?.let { msg ->
-        AlertDialog(
-            onDismissRequest = { errorMessage = null },
-            icon = {
-                Icon(Icons.Filled.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
-            },
-            title = { Text(errorTitle) },
-            text = { Text(msg) },
-            confirmButton = {
-                Button(onClick = { errorMessage = null }) {
-                    Text(stringResource("ok", language))
-                }
-            }
+        AppConfirmDialog(
+            title = errorTitle,
+            message = msg,
+            confirmText = stringResource("ok", language),
+            cancelText = stringResource("ok", language),
+            onConfirm = { errorMessage = null },
+            onDismiss = { errorMessage = null },
+            icon = Icons.Filled.Error
         )
     }
 
     if (showCreateSuccess) {
-        AlertDialog(
-            onDismissRequest = { showCreateSuccess = false },
-            icon = {
-                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            },
-            title = { Text(successTitle) },
-            text = { Text(databaseCreatedTitle) },
-            confirmButton = {
-                Button(onClick = { showCreateSuccess = false }) {
-                    Text(stringResource("ok", language))
-                }
-            }
+        AppConfirmDialog(
+            title = successTitle,
+            message = databaseCreatedTitle,
+            confirmText = stringResource("ok", language),
+            cancelText = stringResource("ok", language),
+            onConfirm = { showCreateSuccess = false },
+            onDismiss = { showCreateSuccess = false },
+            icon = Icons.Filled.CheckCircle
         )
     }
 
     if (showDeleteSuccess) {
-        AlertDialog(
-            onDismissRequest = { showDeleteSuccess = false },
-            icon = {
-                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            },
-            title = { Text(successTitle) },
-            text = { Text(databaseDroppedTitle) },
-            confirmButton = {
-                Button(onClick = { showDeleteSuccess = false }) {
-                    Text(stringResource("ok", language))
-                }
-            }
+        AppConfirmDialog(
+            title = successTitle,
+            message = databaseDroppedTitle,
+            confirmText = stringResource("ok", language),
+            cancelText = stringResource("ok", language),
+            onConfirm = { showDeleteSuccess = false },
+            onDismiss = { showDeleteSuccess = false },
+            icon = Icons.Filled.CheckCircle
         )
     }
 
     confirmDeleteDatabase?.let { dbName ->
-        AlertDialog(
-            onDismissRequest = { confirmDeleteDatabase = null },
-            icon = { Icon(Icons.Filled.Warning, contentDescription = null) },
-            title = { Text(dropDatabaseTitle) },
-            text = { Text(confirmDropDatabaseTemplate.replace("{database}", dbName)) },
-            confirmButton = {
-                Button(onClick = {
-                    scope.launch {
-                        val result = viewModel.dropDatabase(dbName)
-                        if (result) {
-                            showDeleteSuccess = true
-                        } else {
-                            errorMessage = viewModel.lastErrorMessage ?: "删除失败"
-                        }
+        AppConfirmDialog(
+            title = dropDatabaseTitle,
+            message = confirmDropDatabaseTemplate.replace("{database}", dbName),
+            confirmText = stringResource("delete", language),
+            cancelText = cancelText,
+            onConfirm = {
+                scope.launch {
+                    val result = viewModel.dropDatabase(dbName)
+                    if (result) {
+                        showDeleteSuccess = true
+                    } else {
+                        errorMessage = viewModel.lastErrorMessage ?: "删除失败"
                     }
-                    confirmDeleteDatabase = null
-                }) {
-                    Text(stringResource("delete", language))
                 }
+                confirmDeleteDatabase = null
             },
-            dismissButton = {
-                TextButton(onClick = { confirmDeleteDatabase = null }) {
-                    Text(cancelText)
-                }
-            }
+            onDismiss = { confirmDeleteDatabase = null },
+            isDangerous = true
         )
     }
 

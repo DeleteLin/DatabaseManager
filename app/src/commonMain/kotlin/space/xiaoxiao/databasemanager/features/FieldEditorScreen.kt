@@ -12,6 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
+import space.xiaoxiao.databasemanager.components.AppButton
+import space.xiaoxiao.databasemanager.components.AppConfirmDialog
+import space.xiaoxiao.databasemanager.components.AppTextButton
+import space.xiaoxiao.databasemanager.components.AppTextField
+import space.xiaoxiao.databasemanager.components.AppTopBar
+import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.core.ColumnDefinition
 import kotlinx.coroutines.launch
 
@@ -91,15 +97,11 @@ fun FieldEditorScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                },
+            AppTopBar(
+                title = title,
+                onNavigationClick = onNavigateBack,
                 actions = {
-                    TextButton(
+                    AppTextButton(
                         onClick = {
                             if (name.isBlank()) {
                                 errorMessage = "字段名不能为空"
@@ -173,13 +175,12 @@ fun FieldEditorScreen(
             }
 
             // 长度
-            OutlinedTextField(
+            AppTextField(
                 value = length,
                 onValueChange = { length = it.filter { c -> c.isDigit() } },
-                label = { Text("长度 (可选)") },
-                modifier = Modifier.fillMaxWidth(),
+                label = "长度 (可选)",
                 singleLine = true,
-                placeholder = { Text("例如：255") }
+                placeholder = "例如：255"
             )
 
             // 字符集选择器（仅文本类型显示）
@@ -218,22 +219,19 @@ fun FieldEditorScreen(
             }
 
             // 默认值
-            OutlinedTextField(
+            AppTextField(
                 value = defaultValue,
                 onValueChange = { defaultValue = it },
-                label = { Text("默认值 (可选)") },
-                modifier = Modifier.fillMaxWidth(),
+                label = "默认值 (可选)",
                 singleLine = true
             )
 
             // 注释
-            OutlinedTextField(
+            AppTextField(
                 value = comment,
                 onValueChange = { comment = it },
-                label = { Text("注释 (可选)") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
+                label = "注释 (可选)",
+                modifier = Modifier.height(100.dp),
                 maxLines = 4
             )
 
@@ -286,12 +284,12 @@ fun FieldEditorScreen(
                 }
             },
             confirmButton = {
-                Button(
+                AppButton(
                     onClick = {
                         // 验证：需要长度的类型必须指定长度
                         if (typeName in requiresLengthTypes && length.isEmpty()) {
                             errorMessage = "数据类型 '$typeName' 必须指定长度"
-                            return@Button
+                            return@AppButton
                         }
                         isSaving = true
                         scope.launch {
@@ -322,7 +320,7 @@ fun FieldEditorScreen(
                     enabled = !isSaving
                 ) {
                     if (isSaving) {
-                        CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                        SmallLoadingIndicator()
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("保存中...")
                     } else {
@@ -331,7 +329,7 @@ fun FieldEditorScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showSaveDialog = false }) {
+                AppTextButton(onClick = { showSaveDialog = false }) {
                     Text("取消")
                 }
             }
@@ -340,18 +338,14 @@ fun FieldEditorScreen(
 
     // 错误对话框
     errorMessage?.let { msg ->
-        AlertDialog(
-            onDismissRequest = { errorMessage = null },
-            icon = {
-                Icon(Icons.Filled.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
-            },
-            title = { Text("错误") },
-            text = { Text(msg) },
-            confirmButton = {
-                Button(onClick = { errorMessage = null }) {
-                    Text("确定")
-                }
-            }
+        AppConfirmDialog(
+            title = "错误",
+            message = msg,
+            confirmText = "确定",
+            cancelText = "确定",
+            onConfirm = { errorMessage = null },
+            onDismiss = { errorMessage = null },
+            icon = Icons.Filled.Error
         )
     }
 }

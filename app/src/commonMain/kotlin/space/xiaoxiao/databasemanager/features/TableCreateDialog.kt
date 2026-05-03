@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppCustomDialog
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 import space.xiaoxiao.databasemanager.core.*
@@ -32,94 +33,78 @@ fun TableCreateDialog(
     var primaryKeys by remember { mutableStateOf(setOf<String>()) }
     var showAddColumnDialog by remember { mutableStateOf(false) }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource("create_table", language)) },
-        text = {
-            Column(modifier = Modifier.fillMaxWidth().height(400.dp)) {
-                // 表名输入
-                OutlinedTextField(
-                    value = tableName,
-                    onValueChange = { tableName = it },
-                    label = { Text(stringResource("table_name", language)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // 字段列表
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource("fields", language) + ": ${columns.size}",
-                        style = MaterialTheme.typography.titleSmall
+    AppCustomDialog(
+        title = stringResource("create_table", language),
+        confirmText = stringResource("ok", language),
+        cancelText = stringResource("cancel", language),
+        onConfirm = {
+            if (tableName.isNotBlank() && columns.isNotEmpty()) {
+                onCreate(
+                    TableDefinition(
+                        name = tableName,
+                        columns = columns,
+                        primaryKeys = primaryKeys.toList()
                     )
-                    IconButton(onClick = { showAddColumnDialog = true }) {
-                        Icon(Icons.Filled.Add, contentDescription = stringResource("add", language))
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                if (columns.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            stringResource("no_data", language),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                } else {
-                    LazyColumn(modifier = Modifier.weight(1f)) {
-                        items(columns) { column ->
-                            ColumnItem(
-                                column = column,
-                                isPrimaryKey = column.name in primaryKeys,
-                                onTogglePrimaryKey = {
-                                    primaryKeys = if (column.name in primaryKeys) {
-                                        primaryKeys - column.name
-                                    } else {
-                                        primaryKeys + column.name
-                                    }
-                                },
-                                onDelete = {
-                                    columns = columns.filter { it.name != column.name }
-                                    primaryKeys = primaryKeys - column.name
-                                },
-                                language = language
-                            )
-                        }
-                    }
-                }
+                )
             }
         },
-        confirmButton = {
-            Button(
-                onClick = {
-                    if (tableName.isNotBlank() && columns.isNotEmpty()) {
-                        onCreate(
-                            TableDefinition(
-                                name = tableName,
-                                columns = columns,
-                                primaryKeys = primaryKeys.toList()
-                            )
-                        )
-                    }
-                },
-                enabled = tableName.isNotBlank() && columns.isNotEmpty()
+        onDismiss = onDismiss,
+        content = {
+            // 表名输入
+            OutlinedTextField(
+                value = tableName,
+                onValueChange = { tableName = it },
+                label = { Text(stringResource("table_name", language)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 字段列表
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stringResource("ok", language))
+                Text(
+                    text = stringResource("fields", language) + ": ${columns.size}",
+                    style = MaterialTheme.typography.titleSmall
+                )
+                IconButton(onClick = { showAddColumnDialog = true }) {
+                    Icon(Icons.Filled.Add, contentDescription = stringResource("add", language))
+                }
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource("cancel", language))
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (columns.isEmpty()) {
+                Text(
+                    stringResource("no_data", language),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+                )
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxWidth().heightIn(max = 250.dp)) {
+                    items(columns) { column ->
+                        ColumnItem(
+                            column = column,
+                            isPrimaryKey = column.name in primaryKeys,
+                            onTogglePrimaryKey = {
+                                primaryKeys = if (column.name in primaryKeys) {
+                                    primaryKeys - column.name
+                                } else {
+                                    primaryKeys + column.name
+                                }
+                            },
+                            onDelete = {
+                                columns = columns.filter { it.name != column.name }
+                                primaryKeys = primaryKeys - column.name
+                            },
+                            language = language
+                        )
+                    }
+                }
             }
         }
     )
@@ -209,141 +194,129 @@ private fun AddColumnDialog(
         "BOOLEAN", "BLOB"
     )
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource("add_field", language)) },
-        text = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text(stringResource("field_name", language)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // 类型选择
-                var typeExpanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = typeExpanded,
-                    onExpandedChange = { typeExpanded = !typeExpanded }
-                ) {
-                    OutlinedTextField(
-                        value = typeName,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text(stringResource("field_type", language)) },
-                        modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeExpanded) }
-                    )
-                    ExposedDropdownMenu(
-                        expanded = typeExpanded,
-                        onDismissRequest = { typeExpanded = false }
-                    ) {
-                        commonTypes.forEach { type ->
-                            DropdownMenuItem(
-                                text = { Text(type) },
-                                onClick = {
-                                    typeName = type
-                                    typeExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // 长度（可选）
-                if (typeName in listOf("VARCHAR", "CHAR", "DECIMAL")) {
-                    OutlinedTextField(
-                        value = length,
-                        onValueChange = { length = it },
-                        label = { Text(stringResource("field_length", language)) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-
-                // 默认值
-                OutlinedTextField(
-                    value = defaultValue,
-                    onValueChange = { defaultValue = it },
-                    label = { Text(stringResource("field_default", language)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // 注释
-                OutlinedTextField(
-                    value = comment,
-                    onValueChange = { comment = it },
-                    label = { Text(stringResource("field_comment", language)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // 选项
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Checkbox(
-                            checked = isNullable,
-                            onCheckedChange = { isNullable = it }
-                        )
-                        Text(stringResource("field_nullable", language))
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Checkbox(
-                            checked = isAutoIncrement,
-                            onCheckedChange = { isAutoIncrement = it }
-                        )
-                        Text(stringResource("field_auto_increment", language))
-                    }
-                }
+    AppCustomDialog(
+        title = stringResource("add_field", language),
+        confirmText = stringResource("add", language),
+        cancelText = stringResource("cancel", language),
+        onConfirm = {
+            val fullType = if (length.isNotEmpty() && typeName in listOf("VARCHAR", "CHAR", "DECIMAL")) {
+                "$typeName($length)"
+            } else {
+                typeName
             }
+            onAdd(
+                ColumnDefinition(
+                    name = name,
+                    typeName = fullType,
+                    isNullable = isNullable,
+                    isAutoIncrement = isAutoIncrement,
+                    defaultValue = defaultValue.ifBlank { null },
+                    comment = comment.ifBlank { null }
+                )
+            )
         },
-        confirmButton = {
-            Button(
-                onClick = {
-                    val fullType = if (length.isNotEmpty() && typeName in listOf("VARCHAR", "CHAR", "DECIMAL")) {
-                        "$typeName($length)"
-                    } else {
-                        typeName
-                    }
-                    onAdd(
-                        ColumnDefinition(
-                            name = name,
-                            typeName = fullType,
-                            isNullable = isNullable,
-                            isAutoIncrement = isAutoIncrement,
-                            defaultValue = defaultValue.ifBlank { null },
-                            comment = comment.ifBlank { null }
-                        )
-                    )
-                },
-                enabled = name.isNotBlank() && name !in existingColumnNames
+        onDismiss = onDismiss,
+        content = {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(stringResource("field_name", language)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 类型选择
+            var typeExpanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = typeExpanded,
+                onExpandedChange = { typeExpanded = !typeExpanded }
             ) {
-                Text(stringResource("add", language))
+                OutlinedTextField(
+                    value = typeName,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource("field_type", language)) },
+                    modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeExpanded) }
+                )
+                ExposedDropdownMenu(
+                    expanded = typeExpanded,
+                    onDismissRequest = { typeExpanded = false }
+                ) {
+                    commonTypes.forEach { type ->
+                        DropdownMenuItem(
+                            text = { Text(type) },
+                            onClick = {
+                                typeName = type
+                                typeExpanded = false
+                            }
+                        )
+                    }
+                }
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource("cancel", language))
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 长度（可选）
+            if (typeName in listOf("VARCHAR", "CHAR", "DECIMAL")) {
+                OutlinedTextField(
+                    value = length,
+                    onValueChange = { length = it },
+                    label = { Text(stringResource("field_length", language)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // 默认值
+            OutlinedTextField(
+                value = defaultValue,
+                onValueChange = { defaultValue = it },
+                label = { Text(stringResource("field_default", language)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 注释
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it },
+                label = { Text(stringResource("field_comment", language)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 选项
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Checkbox(
+                        checked = isNullable,
+                        onCheckedChange = { isNullable = it }
+                    )
+                    Text(stringResource("field_nullable", language))
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Checkbox(
+                        checked = isAutoIncrement,
+                        onCheckedChange = { isAutoIncrement = it }
+                    )
+                    Text(stringResource("field_auto_increment", language))
+                }
             }
         }
     )

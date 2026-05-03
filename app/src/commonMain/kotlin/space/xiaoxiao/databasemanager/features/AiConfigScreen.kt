@@ -15,6 +15,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppTextButton
+import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
@@ -53,13 +55,9 @@ fun AiConfigScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource("ai_config_menu", language)) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
+            AppTopBar(
+                title = stringResource("ai_config_menu", language),
+                onNavigationClick = onNavigateBack,
                 actions = {
                     IconButton(
                         onClick = {
@@ -174,7 +172,7 @@ fun AiConfigScreen(
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        TextButton(
+                        AppTextButton(
                             onClick = { showPromptEditor = !showPromptEditor }
                         ) {
                             Text(
@@ -210,7 +208,7 @@ fun AiConfigScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            TextButton(
+                            AppTextButton(
                                 onClick = {
                                     customPromptZh = TextFieldValue(AiConfig.DEFAULT_AI_PROMPT_ZH)
                                     customPromptEn = TextFieldValue(AiConfig.DEFAULT_AI_PROMPT_EN)

@@ -14,6 +14,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
+import space.xiaoxiao.databasemanager.components.AppConfirmDialog
+import space.xiaoxiao.databasemanager.components.AppTextButton
+import space.xiaoxiao.databasemanager.components.AppTextField
+import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,14 +56,13 @@ fun ConfigBackupScreen(
     val confirmClearText = stringResource("confirm_clear_config_exit", language)
 
     if (toastMessage != null) {
-        AlertDialog(
-            onDismissRequest = { toastMessage = null },
-            confirmButton = {
-                TextButton(onClick = { toastMessage = null }) {
-                    Text(okText)
-                }
-            },
-            text = { Text(toastMessage ?: "") }
+        AppConfirmDialog(
+            title = "",
+            message = toastMessage ?: "",
+            confirmText = okText,
+            cancelText = okText,
+            onConfirm = { toastMessage = null },
+            onDismiss = { toastMessage = null }
         )
     }
 
@@ -112,44 +115,33 @@ fun ConfigBackupScreen(
     }
 
     if (showClearDialog) {
-        AlertDialog(
-            onDismissRequest = { if (!busy) showClearDialog = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        if (busy) return@TextButton
-                        busy = true
-                        scope.launch {
-                            try {
-                                onClearConfigAndExit()
-                            } finally {
-                                busy = false
-                                showClearDialog = false
-                            }
-                        }
+        AppConfirmDialog(
+            title = clearText,
+            message = confirmClearText,
+            confirmText = confirmText,
+            cancelText = cancelText,
+            onConfirm = {
+                if (busy) return@AppConfirmDialog
+                busy = true
+                scope.launch {
+                    try {
+                        onClearConfigAndExit()
+                    } finally {
+                        busy = false
+                        showClearDialog = false
                     }
-                ) {
-                    Text(confirmText)
                 }
             },
-            dismissButton = {
-                TextButton(onClick = { if (!busy) showClearDialog = false }) {
-                    Text(cancelText)
-                }
-            },
-            text = { Text(confirmClearText) }
+            onDismiss = { if (!busy) showClearDialog = false },
+            isDangerous = true
         )
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(titleText) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                    }
-                }
+            AppTopBar(
+                title = titleText,
+                onNavigationClick = onNavigateBack
             )
         }
     ) { paddingValues ->
@@ -235,13 +227,13 @@ private fun PasswordInputDialog(
         title = { Text(title) },
         text = {
             Column {
-                OutlinedTextField(
+                AppTextField(
                     value = password,
                     onValueChange = {
                         password = it
                         error = null
                     },
-                    label = { Text(passwordLabel) },
+                    label = passwordLabel,
                     singleLine = true
                 )
                 if (error != null) {
@@ -251,11 +243,11 @@ private fun PasswordInputDialog(
             }
         },
         confirmButton = {
-            TextButton(
+            AppTextButton(
                 onClick = {
                     if (password.length < minLength) {
                         error = tooShortTpl.replace("{min}", minLength.toString())
-                        return@TextButton
+                        return@AppTextButton
                     }
                     scope.launch { onConfirm(password) }
                 }
@@ -264,7 +256,7 @@ private fun PasswordInputDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text(cancelText) }
+            AppTextButton(onClick = onDismiss) { Text(cancelText) }
         }
     )
 }
@@ -293,23 +285,23 @@ private fun PasswordConfirmDialog(
         title = { Text(title) },
         text = {
             Column {
-                OutlinedTextField(
+                AppTextField(
                     value = password,
                     onValueChange = {
                         password = it
                         error = null
                     },
-                    label = { Text(passwordLabel) },
+                    label = passwordLabel,
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
+                AppTextField(
                     value = confirm,
                     onValueChange = {
                         confirm = it
                         error = null
                     },
-                    label = { Text(confirmLabel) },
+                    label = confirmLabel,
                     singleLine = true
                 )
                 if (error != null) {
@@ -319,15 +311,15 @@ private fun PasswordConfirmDialog(
             }
         },
         confirmButton = {
-            TextButton(
+            AppTextButton(
                 onClick = {
                     if (password.length < minLength) {
                         error = tooShortTpl.replace("{min}", minLength.toString())
-                        return@TextButton
+                        return@AppTextButton
                     }
                     if (password != confirm) {
                         error = mismatchText
-                        return@TextButton
+                        return@AppTextButton
                     }
                     scope.launch { onConfirm(password) }
                 }
@@ -336,7 +328,7 @@ private fun PasswordConfirmDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text(cancelText) }
+            AppTextButton(onClick = onDismiss) { Text(cancelText) }
         }
     )
 }

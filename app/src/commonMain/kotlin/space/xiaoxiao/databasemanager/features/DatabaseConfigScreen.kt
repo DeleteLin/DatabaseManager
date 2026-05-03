@@ -30,6 +30,13 @@ import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.core.DatabaseType
 import space.xiaoxiao.databasemanager.core.createDatabaseClient
 import space.xiaoxiao.databasemanager.theme.AppSpacing
+import space.xiaoxiao.databasemanager.components.AppButton
+import space.xiaoxiao.databasemanager.components.AppTextButton
+import space.xiaoxiao.databasemanager.components.AppTextField
+import space.xiaoxiao.databasemanager.components.AppTopBar
+import space.xiaoxiao.databasemanager.components.AppTopBar
+import space.xiaoxiao.databasemanager.components.ButtonVariant
+import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -143,17 +150,11 @@ fun DatabaseConfigScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(if (configToEdit != null) "edit_database" else "add_database", language))
-                },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource("back", language))
-                    }
-                },
+            AppTopBar(
+                title = stringResource(if (configToEdit != null) "edit_database" else "add_database", language),
+                onNavigationClick = onNavigateBack,
                 actions = {
-                    TextButton(
+                    AppTextButton(
                         onClick = {
                             val config = buildConfig()
                             onSave(config)
@@ -260,12 +261,11 @@ fun DatabaseConfigScreen(
                 isError = databaseError != null,
                 supportingText = databaseError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
             )
-            OutlinedTextField(
+            AppTextField(
                 value = username,
                 onValueChange = { username = it; testResult = null },
-                label = { Text(stringResource("username", language)) },
-                placeholder = { Text(stringResource("username_placeholder", language)) },
-                modifier = Modifier.fillMaxWidth(),
+                label = stringResource("username", language),
+                placeholder = stringResource("username_placeholder", language),
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Filled.Person, contentDescription = null, modifier = Modifier.size(18.dp)) }
             )
@@ -327,7 +327,7 @@ fun DatabaseConfigScreen(
             // 测试连接按钮和结果
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
+            AppButton(
                 onClick = {
                     scope.launch {
                         isTesting = true
@@ -363,14 +363,11 @@ fun DatabaseConfigScreen(
                     }
                 },
                 enabled = !isTesting && host.isNotBlank() && database.isNotBlank(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                variant = ButtonVariant.Secondary
             ) {
                 if (isTesting) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    SmallLoadingIndicator()
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(if (language == Language.CHINESE) "测试中..." else "Testing...")
                 } else {

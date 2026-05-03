@@ -17,7 +17,14 @@ import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.core.ConnectionStatus
 import space.xiaoxiao.databasemanager.core.DbExecutionChannel
 import space.xiaoxiao.databasemanager.core.ExecutionPurpose
+import space.xiaoxiao.databasemanager.components.AppButton
+import space.xiaoxiao.databasemanager.components.AppConfirmDialog
+import space.xiaoxiao.databasemanager.components.AppCustomDialog
+import space.xiaoxiao.databasemanager.components.AppLoadingIndicator
 import space.xiaoxiao.databasemanager.components.AppPillTabRow
+import space.xiaoxiao.databasemanager.components.AppTextButton
+import space.xiaoxiao.databasemanager.components.AppTextField
+import space.xiaoxiao.databasemanager.components.ButtonVariant
 import space.xiaoxiao.databasemanager.core.createDatabaseClient
 import space.xiaoxiao.databasemanager.features.DatabaseConfigInfo
 import space.xiaoxiao.databasemanager.i18n.Language
@@ -173,7 +180,7 @@ fun ChartScreen(
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                         )
-                        Button(onClick = { showCreatePanelDialog = true }) {
+                        AppButton(onClick = { showCreatePanelDialog = true }) {
                             Icon(Icons.Filled.Add, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(stringResource("new_chart_panel", language))
@@ -241,110 +248,75 @@ fun ChartScreen(
 
     // 创建面板对话框
     if (showCreatePanelDialog) {
-        AlertDialog(
-            onDismissRequest = { showCreatePanelDialog = false },
-            title = { Text(stringResource("new_chart_panel", language)) },
-            text = {
-                OutlinedTextField(
-                    value = newPanelName,
-                    onValueChange = { newPanelName = it },
-                    label = { Text(stringResource("panel_name", language)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        if (newPanelName.isNotBlank()) {
-                            panelManager.createPanel(newPanelName)
-                            newPanelName = ""
-                            showCreatePanelDialog = false
-                        }
-                    },
-                    enabled = newPanelName.isNotBlank()
-                ) {
-                    Text(stringResource("create", language))
+        AppCustomDialog(
+            title = stringResource("new_chart_panel", language),
+            confirmText = stringResource("create", language),
+            cancelText = stringResource("cancel", language),
+            onConfirm = {
+                if (newPanelName.isNotBlank()) {
+                    panelManager.createPanel(newPanelName)
+                    newPanelName = ""
+                    showCreatePanelDialog = false
                 }
             },
-            dismissButton = {
-                TextButton(onClick = { showCreatePanelDialog = false }) {
-                    Text(stringResource("cancel", language))
-                }
+            onDismiss = { showCreatePanelDialog = false },
+            content = {
+                AppTextField(
+                                    value = newPanelName,
+                                    onValueChange = { newPanelName = it },
+                                    label = stringResource("panel_name", language),
+                                    singleLine = true
+                                )
             }
         )
     }
 
     // 重命名面板对话框
     if (showRenamePanelDialog && panelToRename != null) {
-        AlertDialog(
-            onDismissRequest = { showRenamePanelDialog = false },
-            title = { Text(stringResource("rename_panel", language)) },
-            text = {
-                OutlinedTextField(
-                    value = newPanelName,
-                    onValueChange = { newPanelName = it },
-                    label = { Text(stringResource("panel_name", language)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        if (newPanelName.isNotBlank()) {
-                            panelManager.renamePanel(panelToRename!!.id, newPanelName)
-                            panelToRename = null
-                            newPanelName = ""
-                            showRenamePanelDialog = false
-                        }
-                    },
-                    enabled = newPanelName.isNotBlank()
-                ) {
-                    Text(stringResource("save", language))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = {
+        AppCustomDialog(
+            title = stringResource("rename_panel", language),
+            confirmText = stringResource("save", language),
+            cancelText = stringResource("cancel", language),
+            onConfirm = {
+                if (newPanelName.isNotBlank()) {
+                    panelManager.renamePanel(panelToRename!!.id, newPanelName)
                     panelToRename = null
+                    newPanelName = ""
                     showRenamePanelDialog = false
-                }) {
-                    Text(stringResource("cancel", language))
                 }
+            },
+            onDismiss = {
+                panelToRename = null
+                showRenamePanelDialog = false
+            },
+            content = {
+                AppTextField(
+                                    value = newPanelName,
+                                    onValueChange = { newPanelName = it },
+                                    label = stringResource("panel_name", language),
+                                    singleLine = true
+                                )
             }
         )
     }
 
     // 删除面板确认对话框
     if (showDeletePanelDialog && panelToDelete != null) {
-        AlertDialog(
-            onDismissRequest = { showDeletePanelDialog = false },
-            title = { Text(stringResource("delete_panel", language)) },
-            text = {
-                Text(stringResource("confirm_delete_panel", language) + " \"${panelToDelete!!.name}\"?")
+        AppConfirmDialog(
+            title = stringResource("delete_panel", language),
+            message = stringResource("confirm_delete_panel", language) + " \"${panelToDelete!!.name}\"?",
+            confirmText = stringResource("delete", language),
+            cancelText = stringResource("cancel", language),
+            onConfirm = {
+                panelManager.deletePanel(panelToDelete!!.id)
+                panelToDelete = null
+                showDeletePanelDialog = false
             },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        panelManager.deletePanel(panelToDelete!!.id)
-                        panelToDelete = null
-                        showDeletePanelDialog = false
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text(stringResource("delete", language))
-                }
+            onDismiss = {
+                panelToDelete = null
+                showDeletePanelDialog = false
             },
-            dismissButton = {
-                TextButton(onClick = {
-                    panelToDelete = null
-                    showDeletePanelDialog = false
-                }) {
-                    Text(stringResource("cancel", language))
-                }
-            }
+            isDangerous = true
         )
     }
 }
@@ -455,7 +427,7 @@ private fun ChartCard(
                 contentAlignment = Alignment.Center
             ) {
                 when {
-                    isLoading -> CircularProgressIndicator()
+                    isLoading -> AppLoadingIndicator()
                     error != null -> Text(
                         text = error,
                         color = MaterialTheme.colorScheme.error,

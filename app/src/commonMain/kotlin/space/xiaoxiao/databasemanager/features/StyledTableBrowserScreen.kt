@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppCustomDialog
+import space.xiaoxiao.databasemanager.components.AppLoadingIndicator
+import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.AppPillTabRow
 import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
@@ -237,7 +240,7 @@ fun StyledTableBrowserScreen(
             }
         } else if (connectionState == ConnectionUiState.CONNECTING) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                AppLoadingIndicator()
             }
         } else if (connectionState == ConnectionUiState.FAILED) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -533,24 +536,17 @@ fun StyledTableBrowserScreen(
 
     // 确认对话框
     confirmDialogState?.let { state ->
-        AlertDialog(
-            onDismissRequest = { confirmDialogState = null },
-            title = { Text(state.title) },
-            text = { Text(state.message) },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        state.onConfirm()
-                        confirmDialogState = null
-                    }
-                ) {
-                    Text(stringResource("ok", language))
-                }
+        AppCustomDialog(
+            title = state.title,
+            confirmText = stringResource("ok", language),
+            cancelText = stringResource("cancel", language),
+            onConfirm = {
+                state.onConfirm()
+                confirmDialogState = null
             },
-            dismissButton = {
-                TextButton(onClick = { confirmDialogState = null }) {
-                    Text(stringResource("cancel", language))
-                }
+            onDismiss = { confirmDialogState = null },
+            content = {
+                Text(state.message)
             }
         )
     }
@@ -709,7 +705,7 @@ fun StyledTableBrowserScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator()
+            AppLoadingIndicator()
         }
     }
 }
@@ -812,16 +808,9 @@ private fun TableDetailPanel(
         Column(modifier = Modifier.fillMaxSize()) {
             // 窄屏模式下显示返回按钮和表名
             if (showBackButton && selectedTableName != null) {
-                TopAppBar(
-                    title = { Text(selectedTableName) },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource("back", language))
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    )
+                AppTopBar(
+                    title = selectedTableName,
+                    onNavigationClick = onBack
                 )
             }
 
@@ -938,7 +927,7 @@ private fun FieldsTab(
                     }
                 }
             } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                AppLoadingIndicator()
             }
         }
     }
@@ -1198,7 +1187,7 @@ private fun StatsTab(
                     }
                 }
             } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                AppLoadingIndicator()
             }
         }
     }

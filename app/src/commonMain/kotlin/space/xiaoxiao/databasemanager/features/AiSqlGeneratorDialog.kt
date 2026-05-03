@@ -23,7 +23,10 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.*
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppLoadingIndicator
+import space.xiaoxiao.databasemanager.components.AppTextButton
 import space.xiaoxiao.databasemanager.components.CardVariant
+import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.core.DatabaseType
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
@@ -269,10 +272,7 @@ private fun AiGeneratorScreen(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp
-                        )
+                        AppLoadingIndicator()
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = stringResource("ai_generating", language),
@@ -347,11 +347,7 @@ private fun AiGeneratorScreen(
                     enabled = userInput.text.isNotBlank() && !isGenerating
                 ) {
                     if (isGenerating) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
+                        SmallLoadingIndicator()
                     } else {
                         Icon(
                             Icons.Filled.SmartToy,

@@ -24,13 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
-import space.xiaoxiao.databasemanager.components.StyledErrorState
-import space.xiaoxiao.databasemanager.components.AppIcons
-import space.xiaoxiao.databasemanager.components.CodeEditor
-import space.xiaoxiao.databasemanager.components.EditorLanguage
+import space.xiaoxiao.databasemanager.components.AppButton
 import space.xiaoxiao.databasemanager.components.AppCard
+import space.xiaoxiao.databasemanager.components.AppCustomDialog
+import space.xiaoxiao.databasemanager.components.AppErrorState
+import space.xiaoxiao.databasemanager.components.AppOutlinedButton
 import space.xiaoxiao.databasemanager.components.CardVariant
+import space.xiaoxiao.databasemanager.components.CodeEditor
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
+import space.xiaoxiao.databasemanager.components.EditorLanguage
+import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
+import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.theme.AppSpacing
 import space.xiaoxiao.databasemanager.storage.AiConfigStorage
 import kotlinx.coroutines.launch
@@ -430,7 +434,7 @@ fun QueryTabContent(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             // 执行选中按钮
-                            OutlinedButton(
+                            AppOutlinedButton(
                                 onClick = {
                                     val textToExecute = rememberedSelectedText
                                     rememberedSelectedText = ""
@@ -442,12 +446,7 @@ fun QueryTabContent(
                                     }
                                 },
                                 enabled = hasSelection && connectionState == ConnectionUiState.CONNECTED,
-                                shape = RoundedCornerShape(8.dp),
-                                modifier = Modifier.height(36.dp),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.primary
-                                ),
-                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                                modifier = Modifier.height(36.dp)
                             ) {
                                 Icon(Icons.Filled.DragHandle, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -455,7 +454,7 @@ fun QueryTabContent(
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             // 执行全部按钮（主操作）
-                            Button(
+                            AppButton(
                                 onClick = {
                                     KeyboardUtils.hideKeyboard()
                                     scope.launch {
@@ -466,17 +465,10 @@ fun QueryTabContent(
                                     }
                                 },
                                 enabled = textFieldValue.text.isNotBlank() && connectionState == ConnectionUiState.CONNECTED,
-                                shape = RoundedCornerShape(8.dp),
-                                modifier = Modifier.height(36.dp),
-                                colors = ButtonDefaults.buttonColors(),
-                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                                modifier = Modifier.height(36.dp)
                             ) {
                                 if (isExecuting) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(16.dp),
-                                        strokeWidth = 2.dp,
-                                        color = MaterialTheme.colorScheme.onPrimary
-                                    )
+                                    SmallLoadingIndicator()
                                 } else {
                                     Icon(Icons.Filled.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
                                 }
@@ -619,9 +611,8 @@ fun QueryTabContent(
                 val errorMsg = lastErrorMessage ?: ""
                 val errorTemplate = stringResource("error_with_message", language)
                 BoxWithConstraints {
-                    StyledErrorState(
+                    AppErrorState(
                         message = errorTemplate.replace("{message}", errorMsg),
-                        icon = AppIcons.error,
                         onDismiss = { viewModel.lastErrorMessage = null },
                         onRetry = {
                             scope.launch {
@@ -909,10 +900,13 @@ fun DatabaseSelectorForTabDialog(
     language: Language
 ) {
     if (!showDialog) return
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(stringResource("select_database", language)) },
-        text = {
+    AppCustomDialog(
+        title = stringResource("select_database", language),
+        confirmText = stringResource("cancel", language),
+        cancelText = "",
+        onConfirm = onDismissRequest,
+        onDismiss = onDismissRequest,
+        content = {
             if (databases.isEmpty()) {
                 Text(stringResource("no_database_configured", language))
             } else {
@@ -947,11 +941,6 @@ fun DatabaseSelectorForTabDialog(
                         }
                     }
                 }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource("cancel", language))
             }
         }
     )
