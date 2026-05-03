@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.components.AppCustomDialog
 
@@ -65,7 +66,7 @@ fun IndexCreateDialog(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
 
             // 唯一索引选项
             Row(
@@ -78,7 +79,7 @@ fun IndexCreateDialog(
                 Text(stringResource("index_unique", language))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
 
             // 选择字段
             Text(
@@ -86,7 +87,7 @@ fun IndexCreateDialog(
                 style = MaterialTheme.typography.titleSmall
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
             if (columns.isEmpty()) {
                 Text(
@@ -98,7 +99,7 @@ fun IndexCreateDialog(
                     items(columns) { column ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                            modifier = Modifier.fillMaxWidth().padding(vertical = AppSpacing.spaceXs)
                         ) {
                             Checkbox(
                                 checked = column in selectedColumns,

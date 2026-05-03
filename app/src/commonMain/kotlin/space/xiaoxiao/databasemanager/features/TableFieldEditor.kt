@@ -5,10 +5,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.core.ColumnDefinition
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * 字段编辑对话框
@@ -89,7 +89,7 @@ fun FieldEditorDialog(
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
                 // 类型选择
                 var typeExpanded by remember { mutableStateOf(false) }
@@ -121,7 +121,7 @@ fun FieldEditorDialog(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
                 // 长度（可选）
                 if (typeName in listOf("VARCHAR", "CHAR", "DECIMAL")) {
@@ -132,7 +132,7 @@ fun FieldEditorDialog(
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
                 }
 
                 // 字符集选择器（仅文本类型显示）
@@ -168,7 +168,7 @@ fun FieldEditorDialog(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
                 }
 
                 // 默认值
@@ -180,7 +180,7 @@ fun FieldEditorDialog(
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
                 // 注释
                 OutlinedTextField(
@@ -191,7 +191,7 @@ fun FieldEditorDialog(
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
                 // 选项
                 Row(

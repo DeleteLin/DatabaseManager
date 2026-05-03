@@ -238,7 +238,7 @@ fun ChartCreateScreen(
                             text = {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                                 ) {
                                     Text(db.name)
                                     Text(
@@ -305,7 +305,7 @@ fun ChartCreateScreen(
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceXs)
             ) {
                 presetColors.forEach { color ->
                     Box(
@@ -375,12 +375,12 @@ fun ChartCreateScreen(
                 ) {
                     Column(
                         modifier = Modifier.padding(AppSpacing.spaceMd),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                     ) {
                         Text(chartLabelColumnStr, style = MaterialTheme.typography.labelSmall)
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceXs)
                         ) {
                             result.columns.forEachIndexed { index, column ->
                                 FilterChip(
@@ -395,7 +395,7 @@ fun ChartCreateScreen(
                         Text(chartValueColumnStr, style = MaterialTheme.typography.labelSmall)
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceXs)
                         ) {
                             result.columns.forEachIndexed { index, column ->
                                 FilterChip(
@@ -417,10 +417,10 @@ fun ChartCreateScreen(
             ) {
                 if (isExecuting) {
                     SmallLoadingIndicator()
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                 } else {
                     Icon(Icons.Filled.Preview, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                 }
                 Text(previewStr)
             }

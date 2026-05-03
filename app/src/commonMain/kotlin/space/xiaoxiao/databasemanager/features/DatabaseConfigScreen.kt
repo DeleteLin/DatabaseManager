@@ -325,7 +325,7 @@ fun DatabaseConfigScreen(
             }
 
             // 测试连接按钮和结果
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
             AppButton(
                 onClick = {
@@ -368,11 +368,11 @@ fun DatabaseConfigScreen(
             ) {
                 if (isTesting) {
                     SmallLoadingIndicator()
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                     Text(if (language == Language.CHINESE) "测试中..." else "Testing...")
                 } else {
                     Icon(Icons.Filled.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                     Text(stringResource("test_connection", language))
                 }
             }
@@ -391,7 +391,7 @@ fun DatabaseConfigScreen(
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(12.dp),
+                        modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceMd),
                         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                     ) {
                         Icon(
@@ -400,7 +400,7 @@ fun DatabaseConfigScreen(
                             tint = if (testSuccess == true) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                         Text(
                             text = result,
                             style = MaterialTheme.typography.bodyMedium,

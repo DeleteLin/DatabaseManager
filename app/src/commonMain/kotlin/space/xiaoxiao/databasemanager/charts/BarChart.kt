@@ -12,6 +12,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * 柱状图组件
@@ -32,7 +33,7 @@ fun BarChart(
             Text(
                 text = chartData.title,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = AppSpacing.spaceSm)
             )
         }
 

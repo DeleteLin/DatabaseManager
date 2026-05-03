@@ -30,6 +30,7 @@ import space.xiaoxiao.databasemanager.components.DatabaseTypeIconWithBackground
 import space.xiaoxiao.databasemanager.components.AppEmptyState
 import space.xiaoxiao.databasemanager.components.DatabaseConnectionCardSkeleton
 import space.xiaoxiao.databasemanager.theme.AppSpacing
+import space.xiaoxiao.databasemanager.theme.WindowSizeClass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,7 +91,7 @@ fun StyledDatabaseListScreen(
     Scaffold(
         floatingActionButton = {
             BoxWithConstraints {
-                if (maxWidth < 360.dp) {
+                if (maxWidth < WindowSizeClass.CompactWidth) {
                     FloatingActionButton(
                         onClick = { showDatabaseConfigScreen = true }
                     ) {
@@ -101,7 +102,7 @@ fun StyledDatabaseListScreen(
                         onClick = { showDatabaseConfigScreen = true }
                     ) {
                         Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(24.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                         Text(stringResource("add", language))
                     }
                 }
@@ -245,7 +246,7 @@ fun StyledDatabaseConnectionCard(
                         tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(16.dp)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                     Text(
                         text = stringResource("delete", language),
                         color = MaterialTheme.colorScheme.error
@@ -261,7 +262,7 @@ fun StyledDatabaseConnectionCard(
                         tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.size(16.dp)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                     Text(
                         text = stringResource("edit", language),
                         color = MaterialTheme.colorScheme.secondary

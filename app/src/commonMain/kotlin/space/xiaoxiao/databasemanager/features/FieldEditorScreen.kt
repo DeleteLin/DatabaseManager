@@ -20,6 +20,7 @@ import space.xiaoxiao.databasemanager.components.AppTextField
 import space.xiaoxiao.databasemanager.components.AppTopBar
 import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.core.ColumnDefinition
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 import kotlinx.coroutines.launch
 
 /**
@@ -130,8 +131,8 @@ fun FieldEditorScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(AppSpacing.spaceLg),
+            verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceLg)
         ) {
             // 字段名
             OutlinedTextField(
@@ -327,7 +328,7 @@ fun FieldEditorScreen(
                 ) {
                     if (isSaving) {
                         SmallLoadingIndicator()
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                         Text(stringResource("saving", language))
                     } else {
                         Text(stringResource("ok", language))

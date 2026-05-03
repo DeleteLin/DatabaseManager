@@ -34,6 +34,7 @@ import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
 import space.xiaoxiao.databasemanager.components.EditorLanguage
 import space.xiaoxiao.databasemanager.components.SmallLoadingIndicator
 import space.xiaoxiao.databasemanager.theme.AppSpacing
+import space.xiaoxiao.databasemanager.theme.WindowSizeClass
 import space.xiaoxiao.databasemanager.storage.AiConfigStorage
 import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.core.*
@@ -249,7 +250,7 @@ fun QueryTabContent(
             BoxWithConstraints(
                 modifier = Modifier.weight(1f)
             ) {
-                val isWideScreen = maxWidth > 360.dp
+                val isWideScreen = maxWidth > WindowSizeClass.CompactWidth
                 val cardPadding = if (isWideScreen) AppSpacing.spaceLg else AppSpacing.spaceMd
 
                 // 注意：卡片外部不使用 padding，让编辑器占满整个区域以最大化代码编写空间
@@ -306,10 +307,10 @@ fun QueryTabContent(
                                 modifier = Modifier.height(36.dp)
                             ) {
                                 Icon(Icons.Filled.DragHandle, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(4.dp))
+                                Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                                 Text(stringResource("execute_selected", language), style = MaterialTheme.typography.labelMedium)
                             }
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                             // 执行全部按钮（主操作）
                             AppButton(
                                 onClick = {
@@ -329,10 +330,10 @@ fun QueryTabContent(
                                 } else {
                                     Icon(Icons.Filled.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
                                 }
-                                Spacer(modifier = Modifier.width(4.dp))
+                                Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                                 Text(stringResource("execute_all", language), style = MaterialTheme.typography.labelMedium)
                             }
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                             // 三点菜单按钮 - 使用 Box 包裹以正确定位菜单
                             Box {
                                 IconButton(
@@ -444,7 +445,7 @@ fun QueryTabContent(
                             aiConfigStorage = aiConfigStorage,
                             onNavigateToAiConfig = onNavigateToAiConfig
                         )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(AppSpacing.spaceMd))
                         // SQL 输入框 - 带语法高亮
                         CodeEditor(
                             value = textFieldValue,
@@ -485,7 +486,7 @@ fun QueryTabContent(
                             }
                         },
                         language = language,
-                        modifier = Modifier.padding(horizontal = if (maxWidth > 360.dp) 16.dp else 12.dp)
+            modifier = Modifier.padding(horizontal = if (maxWidth > WindowSizeClass.CompactWidth) AppSpacing.spaceLg else AppSpacing.spaceMd)
                     )
                 }
             }
@@ -545,8 +546,8 @@ fun BottomResultPanel(
                     shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = AppSpacing.spaceSm),
+                        horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceXs),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // 左侧：标题与摘要可横向滚动，避免窄屏与右侧操作区抢宽导致溢出
@@ -554,7 +555,7 @@ fun BottomResultPanel(
                             modifier = Modifier
                                 .weight(1f, fill = true)
                                 .horizontalScroll(resultToolbarScroll),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceMd),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
@@ -600,7 +601,7 @@ fun BottomResultPanel(
                         // 右侧：导出（图标）、Auto、展开/折叠 — 固定占位，不随左侧挤压溢出
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(0.dp)
+                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceNone)
                         ) {
                             // 导出（仅图标，菜单内选 CSV/Excel）
                             if (result != null) {
@@ -659,7 +660,7 @@ fun BottomResultPanel(
                                 onClick = { onAutoExpandChange(!autoExpand) }
                             ) {
                                 Box(
-                                    modifier = Modifier.padding(horizontal = 8.dp),
+                                modifier = Modifier.padding(horizontal = AppSpacing.spaceSm),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
@@ -711,13 +712,13 @@ fun BottomResultPanel(
                                         tint = MaterialTheme.colorScheme.primary,
                                         modifier = Modifier.size(48.dp)
                                     )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
                                     Text(
                                         text = stringResource("execution_success", language),
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.primary
                                     )
-                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
                                     Text(
                                         text = stringResource("affected_rows", language).replace("{rows}", updateResult.affectedRows.toString()),
                                         style = MaterialTheme.typography.bodyMedium,
@@ -769,7 +770,7 @@ fun DatabaseSelectorForTabDialog(
                 Text(stringResource("no_database_configured", language))
             } else {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                 ) {
                     items(databases) { db ->
                         AppCard(
@@ -786,7 +787,7 @@ fun DatabaseSelectorForTabDialog(
                                     contentDescription = null,
                                     modifier = Modifier.size(24.dp)
                                 )
-                                Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(AppSpacing.spaceMd))
                                 Column {
                                     Text(text = db.name, style = MaterialTheme.typography.titleMedium)
                                     Text(

@@ -396,8 +396,8 @@ private fun ChartCard(
             Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(0.dp)
+                    .padding(AppSpacing.spaceXs),
+                horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceNone)
             ) {
                 IconButton(onClick = onRefresh, modifier = Modifier.size(32.dp)) {
                     Icon(Icons.Filled.Refresh, contentDescription = stringResource("refresh", language), modifier = Modifier.size(16.dp))

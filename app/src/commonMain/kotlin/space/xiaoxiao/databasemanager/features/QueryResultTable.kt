@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.core.QueryResult
 import space.xiaoxiao.databasemanager.i18n.stringResource
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * 查询结果表格 - 使用虚拟滚动优化大数据量性能
@@ -61,7 +62,7 @@ fun QueryResultTable(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(horizontal = 8.dp)
+                                    .padding(horizontal = AppSpacing.spaceSm)
                             ) {
                                 Text(
                                     text = column.name,
@@ -97,7 +98,7 @@ fun QueryResultTable(
                                 contentAlignment = Alignment.CenterStart,
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(horizontal = 8.dp)
+                                    .padding(horizontal = AppSpacing.spaceSm)
                             ) {
                                 Text(
                                     text = value?.toString() ?: "NULL",
@@ -118,7 +119,7 @@ fun QueryResultTable(
 
         // 导出 CSV 按钮
         if (onExportCsv != null) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
             Button(
                 onClick = onExportCsv,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -128,7 +129,7 @@ fun QueryResultTable(
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                 Text(text = stringResource("export_csv", language))
             }
         }
@@ -172,7 +173,7 @@ fun SimpleQueryResultTable(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = AppSpacing.spaceSm)
                     ) {
                         Text(
                             text = column.name,
@@ -205,7 +206,7 @@ fun SimpleQueryResultTable(
                             contentAlignment = Alignment.CenterStart,
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(horizontal = 8.dp)
+                                .padding(horizontal = AppSpacing.spaceSm)
                         ) {
                             Text(
                                 text = value?.toString() ?: "NULL",
@@ -225,7 +226,7 @@ fun SimpleQueryResultTable(
 
         // 导出 CSV 按钮
         if (onExportCsv != null) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
             Button(
                 onClick = onExportCsv,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -235,7 +236,7 @@ fun SimpleQueryResultTable(
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                 Text(text = stringResource("export_csv", language))
             }
         }

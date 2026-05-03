@@ -21,6 +21,7 @@ import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.i18n.Language
 import space.xiaoxiao.databasemanager.i18n.stringResource
 import space.xiaoxiao.databasemanager.storage.*
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * AI 配置页面 - 独立页面，位于"更多" > "AI 配置"
@@ -85,8 +86,8 @@ fun AiConfigScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(AppSpacing.spaceLg),
+            verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceLg)
         ) {
             // API 类型选择
             Column {
@@ -95,9 +96,9 @@ fun AiConfigScreen(
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                 ) {
                     FilterChip(
                         selected = apiType == ApiType.OPENAI,
@@ -159,8 +160,8 @@ fun AiConfigScreen(
                 variant = CardVariant.Default
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceMd),
+                    verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -235,8 +236,8 @@ fun AiConfigScreen(
                     variant = CardVariant.Default
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceMd),
+                        horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(

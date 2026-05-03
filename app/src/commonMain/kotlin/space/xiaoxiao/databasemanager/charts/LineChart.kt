@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * 折线图组件
@@ -36,7 +37,7 @@ fun LineChart(
             Text(
                 text = chartData.title,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = AppSpacing.spaceSm)
             )
         }
 

@@ -25,6 +25,7 @@ import space.xiaoxiao.databasemanager.components.CardVariant
 import space.xiaoxiao.databasemanager.components.DatabaseTypeIcon
 import space.xiaoxiao.databasemanager.components.ListItemSkeleton
 import space.xiaoxiao.databasemanager.theme.AppSpacing
+import space.xiaoxiao.databasemanager.theme.WindowSizeClass
 import kotlinx.coroutines.launch
 import space.xiaoxiao.databasemanager.core.*
 
@@ -157,7 +158,7 @@ fun StyledTableBrowserScreen(
                 // 顶部一行：数据库切换 + 刷新 + 添加
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedButton(
@@ -178,7 +179,7 @@ fun StyledTableBrowserScreen(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                         ) {
                             Text(
                                 text = buildString {
@@ -258,7 +259,7 @@ fun StyledTableBrowserScreen(
         } else {
             // 使用 BoxWithConstraints 检测可用宽度
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-                val isWideScreen = maxWidth > 500.dp
+                val isWideScreen = maxWidth > WindowSizeClass.MediumWidth
 
                 // 根据屏幕宽度选择布局
                 if (isWideScreen) {
@@ -267,11 +268,11 @@ fun StyledTableBrowserScreen(
                         if (isRedis) {
                             // Redis 数据库不支持表操作提示
                             AppCard(
-                                modifier = Modifier.widthIn(min = 180.dp, max = 220.dp).fillMaxHeight().padding(6.dp),
+                                modifier = Modifier.widthIn(min = 180.dp, max = 220.dp).fillMaxHeight().padding(AppSpacing.spaceXs),
                                 variant = CardVariant.Default
                             ) {
                                 Column(
-                                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                                    modifier = Modifier.fillMaxSize().padding(AppSpacing.spaceLg),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
@@ -281,18 +282,18 @@ fun StyledTableBrowserScreen(
                                         modifier = Modifier.size(48.dp),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
                                     Text(
                                         "Redis 数据库",
                                         style = MaterialTheme.typography.titleSmall
                                     )
-                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
                                     Text(
                                         "不支持表操作",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
                                     Text(
                                         "请使用查询页面\n执行 Redis 命令",
                                         style = MaterialTheme.typography.bodySmall,
@@ -302,7 +303,7 @@ fun StyledTableBrowserScreen(
                             }
                         } else {
                             TableListPanel(
-                            modifier = Modifier.widthIn(min = 180.dp, max = 220.dp).fillMaxHeight().padding(6.dp),
+                            modifier = Modifier.widthIn(min = 180.dp, max = 220.dp).fillMaxHeight().padding(AppSpacing.spaceXs),
                             tables = tables,
                             filteredTables = filteredTables,
                             searchText = searchText,
@@ -317,7 +318,7 @@ fun StyledTableBrowserScreen(
                         }
 
                         TableDetailPanel(
-                            modifier = Modifier.weight(1f).fillMaxHeight().padding(6.dp),
+                            modifier = Modifier.weight(1f).fillMaxHeight().padding(AppSpacing.spaceXs),
                             selectedTableName = selectedTableName,
                             selectedTab = selectedTab,
                             onTabSelected = { selectedTab = it },
@@ -362,7 +363,7 @@ fun StyledTableBrowserScreen(
                     if (showDetailOnNarrowScreen && selectedTableName != null) {
                         // 显示表详情
                         TableDetailPanel(
-                            modifier = Modifier.fillMaxSize().padding(6.dp),
+                            modifier = Modifier.fillMaxSize().padding(AppSpacing.spaceXs),
                             selectedTableName = selectedTableName,
                             selectedTab = selectedTab,
                             onTabSelected = { selectedTab = it },
@@ -406,11 +407,11 @@ fun StyledTableBrowserScreen(
                         if (isRedis) {
                             // Redis 数据库不支持表操作提示
                             AppCard(
-                                modifier = Modifier.fillMaxSize().padding(6.dp),
+                                modifier = Modifier.fillMaxSize().padding(AppSpacing.spaceXs),
                                 variant = CardVariant.Default
                             ) {
                                 Column(
-                                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                                    modifier = Modifier.fillMaxSize().padding(AppSpacing.spaceLg),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
@@ -420,18 +421,18 @@ fun StyledTableBrowserScreen(
                                         modifier = Modifier.size(64.dp),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
                                     Text(
                                         "Redis 数据库",
                                         style = MaterialTheme.typography.titleMedium
                                     )
-                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
                                     Text(
                                         "不支持表操作",
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(AppSpacing.spaceLg))
                                     Text(
                                         "请使用查询页面执行 Redis 命令",
                                         style = MaterialTheme.typography.bodyMedium,
@@ -441,7 +442,7 @@ fun StyledTableBrowserScreen(
                             }
                         } else {
                             TableListPanel(
-                                modifier = Modifier.fillMaxSize().padding(6.dp),
+                                modifier = Modifier.fillMaxSize().padding(AppSpacing.spaceXs),
                                 tables = tables,
                                 filteredTables = filteredTables,
                                 searchText = searchText,
@@ -566,11 +567,11 @@ fun StyledTableBrowserScreen(
             text = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceLg)
                 ) {
                     // 数据库列表
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         items(databases) { db ->
@@ -635,7 +636,7 @@ fun StyledTableBrowserScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         } else LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             items(dialogServerDatabases) { dbName ->
@@ -751,14 +752,14 @@ private fun TableListPanel(
                 onValueChange = onSearchTextChange,
                 placeholder = { Text(stringResource("search", language) + "...") },
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null, modifier = Modifier.size(18.dp)) },
-                modifier = Modifier.fillMaxWidth().padding(6.dp),
+                modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceXs),
                 singleLine = true
             )
 
             Text(
                 text = "${stringResource("select_table", language)} (${tables.size})",
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                modifier = Modifier.padding(horizontal = AppSpacing.spaceMd, vertical = AppSpacing.spaceXs)
             )
 
             if (tables.isEmpty()) {
@@ -789,7 +790,7 @@ private fun TableListPanel(
                             },
                             selected = selectedTableName == table.name,
                             onClick = { onTableSelected(table.name) },
-                            modifier = Modifier.padding(horizontal = 3.dp, vertical = 2.dp)
+                            modifier = Modifier.padding(horizontal = AppSpacing.spaceXxs, vertical = AppSpacing.spaceXxs)
                         )
                     }
                 }
@@ -897,8 +898,8 @@ private fun FieldsTab(
     onDropField: (String) -> Unit
 ) {
     BoxWithConstraints {
-        val isWideScreen = maxWidth > 400.dp
-        Column(modifier = Modifier.fillMaxSize().padding(if (isWideScreen) 8.dp else 6.dp)) {
+        val isWideScreen = maxWidth > WindowSizeClass.CompactWidth
+        Column(modifier = Modifier.fillMaxSize().padding(if (isWideScreen) AppSpacing.spaceSm else AppSpacing.spaceXs)) {
             // 工具栏
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -912,7 +913,7 @@ private fun FieldsTab(
                 if (isWideScreen) {
                     Button(onClick = onAddField) {
                         Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                         Text(stringResource("add_field", language))
                     }
                 } else {
@@ -922,7 +923,7 @@ private fun FieldsTab(
                 }
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceXs))
 
             schema?.let { tableSchema ->
                 if (tableSchema.columns.isEmpty()) {
@@ -961,7 +962,7 @@ private fun FieldItem(
     onDelete: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = AppSpacing.spaceXxs),
         colors = CardDefaults.cardColors(
             containerColor = if (isPrimaryKey)
                 MaterialTheme.colorScheme.primaryContainer
@@ -971,7 +972,7 @@ private fun FieldItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceMd),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 字段信息
@@ -983,7 +984,7 @@ private fun FieldItem(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     if (isPrimaryKey) {
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                         SuggestionChip(
                             onClick = {},
                             label = { Text(stringResource("pk_badge", language)) },
@@ -991,7 +992,7 @@ private fun FieldItem(
                         )
                     }
                     if (column.isAutoIncrement) {
-                        Spacer(modifier = Modifier.width(3.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceXxs))
                         SuggestionChip(
                             onClick = {},
                             label = { Text(stringResource("ai_badge", language)) },
@@ -999,10 +1000,10 @@ private fun FieldItem(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceXxs))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceXs)
                 ) {
                     Text(
                         text = column.typeName,
@@ -1026,7 +1027,7 @@ private fun FieldItem(
                 }
                 column.comment?.let { comment ->
                     if (comment.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(2.dp))
+                        Spacer(modifier = Modifier.height(AppSpacing.spaceXxs))
                         Text(
                             text = "${stringResource("field_comment", language)}: $comment",
                             style = MaterialTheme.typography.bodySmall,
@@ -1056,8 +1057,8 @@ private fun IndexesTab(
     onDropIndex: (String) -> Unit
 ) {
     BoxWithConstraints {
-        val isWideScreen = maxWidth > 400.dp
-        Column(modifier = Modifier.fillMaxSize().padding(if (isWideScreen) 8.dp else 6.dp)) {
+        val isWideScreen = maxWidth > WindowSizeClass.CompactWidth
+        Column(modifier = Modifier.fillMaxSize().padding(if (isWideScreen) AppSpacing.spaceSm else AppSpacing.spaceXs)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -1070,7 +1071,7 @@ private fun IndexesTab(
                 if (isWideScreen) {
                     Button(onClick = onCreateIndex) {
                         Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                         Text(stringResource("create_index", language))
                     }
                 } else {
@@ -1080,7 +1081,7 @@ private fun IndexesTab(
                 }
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceXs))
 
             if (indexes.isEmpty()) {
                 AppEmptyState(
@@ -1111,7 +1112,7 @@ private fun IndexItem(
     onDelete: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = AppSpacing.spaceXxs),
         colors = CardDefaults.cardColors(
             containerColor = if (index.isPrimary)
                 MaterialTheme.colorScheme.primaryContainer
@@ -1121,7 +1122,7 @@ private fun IndexItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceMd),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -1131,7 +1132,7 @@ private fun IndexItem(
                         style = MaterialTheme.typography.bodyLarge
                     )
                     if (index.isPrimary) {
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceSm))
                         SuggestionChip(
                             onClick = {},
                             label = { Text(stringResource("primary", language)) },
@@ -1139,7 +1140,7 @@ private fun IndexItem(
                         )
                     }
                     if (index.isUnique && !index.isPrimary) {
-                        Spacer(modifier = Modifier.width(3.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceXxs))
                         SuggestionChip(
                             onClick = {},
                             label = { Text(stringResource("unique", language)) },
@@ -1147,7 +1148,7 @@ private fun IndexItem(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceXxs))
                 Text(
                     text = "${stringResource("index_columns", language)}: ${index.columns.joinToString(", ")}",
                     style = MaterialTheme.typography.bodyMedium,
@@ -1176,8 +1177,8 @@ private fun StatsTab(
     language: Language
 ) {
     BoxWithConstraints {
-        val isWideScreen = maxWidth > 400.dp
-        val contentPadding = if (isWideScreen) 16.dp else 12.dp
+        val isWideScreen = maxWidth > WindowSizeClass.CompactWidth
+        val contentPadding = if (isWideScreen) AppSpacing.spaceLg else AppSpacing.spaceMd
 
         Column(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
             Text(
@@ -1185,14 +1186,14 @@ private fun StatsTab(
                 style = MaterialTheme.typography.titleMedium
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceMd))
 
             stats?.let { tableStats ->
                 AppCard(
                     modifier = Modifier.fillMaxWidth(),
                     variant = CardVariant.Default
                 ) {
-                    Column(modifier = Modifier.padding(if (isWideScreen) 16.dp else 12.dp)) {
+                    Column(modifier = Modifier.padding(if (isWideScreen) AppSpacing.spaceLg else AppSpacing.spaceMd)) {
                         StatRow(stringResource("table_name", language), tableStats.tableName)
                         StatRow(stringResource("row_count", language), formatNumber(tableStats.rowCount))
                         StatRow(stringResource("data_size", language), formatBytes(tableStats.dataSize))
@@ -1218,7 +1219,7 @@ private fun StatsTab(
 @Composable
 private fun StatRow(label: String, value: String) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = AppSpacing.spaceXs),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -1240,13 +1241,13 @@ private fun ForeignKeysTab(
     schema: TableSchema?,
     language: Language
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(AppSpacing.spaceSm)) {
         Text(
             text = stringResource("foreign_keys", language),
             style = MaterialTheme.typography.titleMedium
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
         val foreignKeys = schema?.foreignKeys ?: emptyList()
 
@@ -1261,11 +1262,11 @@ private fun ForeignKeysTab(
             LazyColumn {
                 items(foreignKeys) { fk ->
                     AppCard(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = AppSpacing.spaceXxs),
                         variant = CardVariant.Default
                     ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(10.dp),
+                            modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceMd),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column {

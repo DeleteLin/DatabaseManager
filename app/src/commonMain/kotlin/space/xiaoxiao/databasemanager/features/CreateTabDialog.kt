@@ -48,7 +48,7 @@ fun CreateTabDialog(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceXs))
                 OutlinedTextField(
                     value = selectedDb?.name ?: "",
                     onValueChange = {},
@@ -78,7 +78,7 @@ fun CreateTabDialog(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceXs))
                 OutlinedTextField(
                     value = sessionName,
                     onValueChange = { sessionName = it },
@@ -128,7 +128,7 @@ fun DatabaseSelectorForCreateTabDialog(
                 Text(text = stringResource("no_database_configured", language))
             } else {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(databases) { db ->

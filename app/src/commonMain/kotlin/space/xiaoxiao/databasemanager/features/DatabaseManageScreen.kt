@@ -164,7 +164,7 @@ fun DatabaseManageScreen(
                 if (!isRedis) {
                     AppTextButton(onClick = { showCreateDialog = true }) {
                         Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(AppSpacing.spaceXs))
                         Text(createDatabaseTitle)
                     }
                 }
@@ -273,7 +273,7 @@ fun DatabaseManageScreen(
                                     }
                                 }
 
-                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceXs)) {
                                     if (!isCurrent) {
                                         IconButton(
                                             onClick = {

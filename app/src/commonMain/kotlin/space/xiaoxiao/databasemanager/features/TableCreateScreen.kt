@@ -77,7 +77,7 @@ fun TableCreateScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp)
+                        .padding(vertical = AppSpacing.spaceLg)
                 )
             } else {
                 LazyColumn(
@@ -145,7 +145,7 @@ private fun ColumnItem(
         variant = CardVariant.Default
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier.fillMaxWidth().padding(AppSpacing.spaceSm),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -233,7 +233,7 @@ private fun AddColumnDialog(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
             // 类型选择
             var typeExpanded by remember { mutableStateOf(false) }
@@ -266,7 +266,7 @@ private fun AddColumnDialog(
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
             // 长度（可选）
             if (typeName in listOf("VARCHAR", "CHAR", "DECIMAL")) {
@@ -276,7 +276,7 @@ private fun AddColumnDialog(
                     label = stringResource("field_length", language),
                     singleLine = true
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
             }
 
             // 默认值
@@ -287,7 +287,7 @@ private fun AddColumnDialog(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
             // 注释
             AppTextField(
@@ -297,7 +297,7 @@ private fun AddColumnDialog(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
 
             // 选项
             Row(

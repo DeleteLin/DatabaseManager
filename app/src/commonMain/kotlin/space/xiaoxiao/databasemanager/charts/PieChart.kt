@@ -13,6 +13,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * 饼图组件
@@ -36,7 +37,7 @@ fun PieChart(
             Text(
                 text = chartData.title,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = AppSpacing.spaceSm)
             )
         }
 
@@ -50,7 +51,7 @@ fun PieChart(
                 modifier = Modifier
                     .weight(1f)
                     .size(220.dp)
-                    .padding(8.dp),
+                    .padding(AppSpacing.spaceSm),
                 contentAlignment = Alignment.Center
             ) {
                 Canvas(modifier = Modifier.fillMaxSize()) {
@@ -92,13 +93,13 @@ fun PieChart(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                        .padding(AppSpacing.spaceSm),
+                    verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                 ) {
                     slices.forEach { slice ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            horizontalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm)
                         ) {
                             Box(
                                 modifier = Modifier

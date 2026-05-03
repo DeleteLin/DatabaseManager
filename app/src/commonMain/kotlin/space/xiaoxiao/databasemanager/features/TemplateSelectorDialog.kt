@@ -21,6 +21,7 @@ import space.xiaoxiao.databasemanager.storage.SqlTemplate
 import space.xiaoxiao.databasemanager.storage.SqlTemplateLibrary
 import space.xiaoxiao.databasemanager.components.AppCard
 import space.xiaoxiao.databasemanager.components.CardVariant
+import space.xiaoxiao.databasemanager.theme.AppSpacing
 
 /**
  * 模板选择对话框
@@ -69,7 +70,7 @@ fun TemplateSelectorDialog(
                 }
             } else {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(AppSpacing.spaceSm),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(templates) { template ->
@@ -106,7 +107,7 @@ private fun TemplateListItem(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
-                .padding(16.dp)
+                .padding(AppSpacing.spaceLg)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -128,7 +129,7 @@ private fun TemplateListItem(
                     modifier = Modifier.size(20.dp)
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceXs))
             Text(
                 text = template.description,
                 style = MaterialTheme.typography.bodySmall,
@@ -136,7 +137,7 @@ private fun TemplateListItem(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(AppSpacing.spaceSm))
             // SQL 预览
             Surface(
                 modifier = Modifier.fillMaxWidth(),
@@ -147,7 +148,7 @@ private fun TemplateListItem(
                     text = template.sql,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(AppSpacing.spaceSm),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
