@@ -3,7 +3,6 @@ package space.xiaoxiao.databasemanager.utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.PrintWriter
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.JOptionPane

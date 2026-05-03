@@ -1,5 +1,8 @@
 package space.xiaoxiao.databasemanager.features
 
+import space.xiaoxiao.databasemanager.i18n.Language
+import space.xiaoxiao.databasemanager.i18n.getString
+
 /**
  * UI 状态密封类 - 用于统一管理加载/成功/错误状态
  */
@@ -147,6 +150,7 @@ enum class ErrorCode {
  * 安全执行操作的辅助函数
  */
 suspend inline fun <T> safeExecute(
+    language: Language = Language.CHINESE,
     crossinline operation: suspend () -> Result<T>
 ): UiState<T> {
     return try {
@@ -154,7 +158,7 @@ suspend inline fun <T> safeExecute(
             onSuccess = { UiState.success(it) },
             onFailure = { exception ->
                 UiState.error(
-                    message = exception.message ?: "未知错误",
+                    message = exception.message ?: getString("error_unknown", language),
                     throwable = exception,
                     errorCode = ErrorCode.UNKNOWN
                 )
@@ -162,7 +166,7 @@ suspend inline fun <T> safeExecute(
         )
     } catch (e: Exception) {
         UiState.error(
-            message = e.message ?: "操作失败",
+            message = e.message ?: getString("operation_failed", language),
             throwable = e
         )
     }
@@ -171,7 +175,7 @@ suspend inline fun <T> safeExecute(
 /**
  * 扩展函数：将 Result 转换为 UiState
  */
-fun <T> Result<T>.toUiState(): UiState<T> = fold(
+fun <T> Result<T>.toUiState(language: Language = Language.CHINESE): UiState<T> = fold(
     onSuccess = { UiState.success(it) },
-    onFailure = { UiState.error(it.message ?: "操作失败", it) }
+    onFailure = { UiState.error(it.message ?: getString("operation_failed", language), it) }
 )
