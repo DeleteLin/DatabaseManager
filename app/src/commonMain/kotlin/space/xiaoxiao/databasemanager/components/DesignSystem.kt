@@ -382,7 +382,8 @@ fun AppErrorState(
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
-    language: Language = Language.CHINESE
+    language: Language = Language.CHINESE,
+    showRetry: Boolean = true
 ) {
     Card(
         modifier = modifier,
@@ -414,8 +415,10 @@ fun AppErrorState(
             AppTextButton(onClick = onDismiss) {
                 Text(stringResource("close", language))
             }
-            AppTextButton(onClick = onRetry) {
-                Text(stringResource("retry", language))
+            if (showRetry) {
+                AppTextButton(onClick = onRetry) {
+                    Text(stringResource("retry", language))
+                }
             }
         }
     }

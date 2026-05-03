@@ -14,8 +14,8 @@ class ThemeState {
     val colorTheme: StateFlow<ColorTheme> = _colorTheme.asStateFlow()
 
     // 是否为暗色模式（便捷属性，从颜色主题派生）
-    val darkTheme: StateFlow<Boolean>
-        get() = MutableStateFlow(_colorTheme.value.isDark).asStateFlow()
+    val darkTheme: Boolean
+        get() = _colorTheme.value.isDark
 
     // 是否已加载配置
     var isLoaded: Boolean = false
